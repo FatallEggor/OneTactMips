@@ -10,7 +10,7 @@ module pc_val_mux
 	);
 
 	always @*
-		case(ctrl)
+		(*full_case*) case(ctrl)
 			2'd0: out <= in0;
 			2'd1: out <= in1;
 			2'd2: out <= in2;

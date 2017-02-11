@@ -58,7 +58,7 @@ localparam
 
 	reg [31:0] rf [31:0];
 	
-	initial 
+/*	initial 
 		begin
 		rf[s1] = 32'h00000002;
 		rf[s2] = 32'h00000001;//32'h43214321;
@@ -67,7 +67,7 @@ localparam
 		rf[a1] = 32'h00000000;
 		
 		rf[gp] = 32'hffffffff;
-		end
+		end*/
 		
 	always @(posedge clk)
 	if (we)

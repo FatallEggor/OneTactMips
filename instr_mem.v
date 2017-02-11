@@ -1,7 +1,7 @@
 
-module rom2 (
-	//input wire clk,
-//	inout wire en,
+`define J_OP 6'b000010
+
+module instr_mem (
 	input wire [31:0] addr,
 	output reg [31:0] data
 	);
@@ -81,11 +81,11 @@ localparam
 	sp = 5'b11101,
 	fp = 5'b11110,
 	ra = 5'b11111;
-//								  {command, from, to}
+	
 	always @(addr)
 	begin
 		case(addr)
-			32'h00000000: data <= {j_op, 26'h0000004};
+			32'h00000000: data <= {`J_OP, 26'h0000004};
 			//32'h00000000: data <= {addi_op, s3, s2, 16'h00000001};
 			//32'h00000000: data <= {Rtype_op, s1, s2, s3, 5'b000000001, add_f};
 			32'h00000001: data <= {beq_op, s1, s2, 16'h0001 /*s3, 5'b00001, xor_f*/};

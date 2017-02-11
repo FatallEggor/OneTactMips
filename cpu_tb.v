@@ -52,13 +52,6 @@ localparam T = 20;
 	cpu uut (
 		.clk(clk), 
 		.reset(reset), 
-		/*.argB_c(argB_c), 
-		.alu_c(alu_c), 
-		.dest_reg_c(dest_reg_c), 
-		.we_c(we_c), 
-		.result_c(result_c), 
-		.mw_c(mw_c), 
-		.branch_c(branch_c), */
 		.led0(led0), 
 		.led1(led1), 
 		.led2(led2), 
