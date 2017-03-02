@@ -1,30 +1,38 @@
 # Makefile for Xilinx Spartan-3A/AN ISE/Webpack toolkit
 #
 # This makefile simplifies a life of FPGA developer by reducing build
-# configuration to the list of source files and top entity name. 
+# configuration and simulation to the list of source files and top entities name. 
 #
 # Grigoriy A. Sitkarev, <sitkarev@unixkomi.ru>
 #
 
-project         = cpu
+project         = cpu 
+sim_project	= cpu_tb 
 top-entity	= cpu
+sim_top-entity	= cpu_tb
 platform	= xc3s700an-fgg484
-sources		= adder.v aludec.v alu.v contr.v cpu_tb.v cpu.v data_mem_tb.v maindec.v mux2to1.v PC.v pc_val_mux.v ram.v reg_file.v rom2.v sign_ext.v
+sources		= adder.v aludec.v alu.v contr.v cpu_tb.v cpu.v data_mem_tb.v maindec.v mux2to1.v PC.v pc_val_mux.v ram.v reg_file.v rom2.v sign_ext.v 
+sim_sources	= cpu_tb.v datd_mem_tb.v  adder.v aludec.v alu.v contr.v cpu_tb.v cpu.v data_mem_tb.v maindec.v mux2to1.v PC.v pc_val_mux.v ram.v reg_file.v rom2.v sign_ext.v
+ 
+
+include-file	=  
 
 # STOP EDITING HERE
 
-project-file	= $(project).prj
-constraint-file	= $(project).ucf
+project-file		= $(project).prj
+sim_project-file	= $(sim_project).prj
+constraint-file		= $(project).ucf
 
-.PHONY: clean
+
+.PHONY: clean simulate
 
 all: $(project).ngc
 
 bitstream: $(project).bit
 
-# This rule generates project file from the list of sources.
+# This rule generates project file for synthesising from the list of sources.
 $(project-file): $(sources)
-	@echo "generating project file \`$(project-file)' from list of sources: $(sources)"
+	@echo "generating synthesising project file \`$(project-file)' from list of sources: $(sources)"
 	@rm -rf $(project-file)
 	@touch $(project-file)
 	@for file in $(sources); do \
@@ -45,7 +53,8 @@ $(project-file): $(sources)
 
 $(project).ngc: $(project-file)
 	echo "run -ifn $(project-file) -top $(top-entity) -compileonly no \
-	     -ofn $(project) -p $(platform) -opt_mode Speed -opt_level 1" | xst
+	     -ofn $(project) -p $(platform) -opt_mode Speed -opt_level 1" | xst | tee xstout | egrep 'WARNING|ERROR' > xsterrs
+	@cat xsterrs
 
 $(project).ngd: $(project).ngc $(constraint-file)
 	ngdbuild -dd _ngo -nt timestamp -uc $(constraint-file) -p $(platform) $< $@
@@ -58,7 +67,6 @@ $(project).pcf: $(project).ngd
 
 $(project)-par.ncd: $(project).ncd
 	par -w $< $@ $(project).pcf
-	
 
 $(project).bit: $(project)-par.ncd
 	bitgen -w -g DebugBitstream:No -g Binary:no \
@@ -86,3 +94,38 @@ install-flash: $(project).bit
 	"assignfile -p 1 -file $(project).bit\n"\
 	"program -p 1 -e -v\n" | impact -batch
 
+# This rule generates project file for simulating from the list of sources.
+$(sim_project-file): $(sim_sources)
+	@echo "generating simulating project file $@  from list of sources: $(sim_sources)"
+	@rm -rf $@
+	@touch $@
+	@for file in $(sim_sources); do \
+	  case `echo $${file} | sed -n -e 's|^.*\(\..*\)$$|\1|p'` in \
+	  .vhd|.vhdl) \
+	    type="vhdl" \
+	    ;; \
+	  .verilog|.v) \
+	    type="verilog" \
+	    ;; \
+	  *) \
+	    echo "warning: excluding unknown file type \`$${file}'"; \
+	    type="" \
+	    ;; \
+	  esac; \
+	  test -z $${type} || echo "$${type} work \"$${file}\"" >> $@; \
+	done
+
+$(sim_project).exe: $(sim_project-file)
+	@if [ "$(inslude-file)"==" " ];\
+	then \
+		fuse -incremental -prj $^ -o $@ work.$(sim_top-entity); \
+	else \
+		fuse -incremental -prj $^ -i $(include-file) -o $@ work.$(sim_top-entity); \
+	fi
+#Simulate the design in ISim 
+#Firstly executed ISim makes view-file and gives a WARRNING-message - that's OK - click "Ignore" to continue
+simulate: $(sim_project).exe 
+	./$^ -gui -view $(sim_project).wcfg -wdb $(sim_poject).wdb
+
+clean:
+	 rm -rf $(project-file) $(sim_project-file) $(project).ngc $(project).ngd $(project).ncd $(project).pcf $(project)-par.ncd $(project).bit $(sim_project).exe
