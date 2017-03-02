@@ -58,6 +58,7 @@ $(project).pcf: $(project).ngd
 
 $(project)-par.ncd: $(project).ncd
 	par -w $< $@ $(project).pcf
+	
 
 $(project).bit: $(project)-par.ncd
 	bitgen -w -g DebugBitstream:No -g Binary:no \
