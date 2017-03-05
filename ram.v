@@ -39,6 +39,3 @@ module ram (
 
 	assign d_out = data[addr];	
 endmodule
-
-
-

@@ -31,16 +31,16 @@ module datapath(
 	wire [31:0] pc_next, pc_inc, pc_br;
 	wire [4:0] dest_reg;
 
-	PC				pc(.ctrl(clk), .reset(reset), .in(pc_next), .out(pc_val));
+	PC		pc(.ctrl(clk), .reset(reset), .in(pc_next), .out(pc_val));
 
 
-	adder			pc_incr(.A(32'h00000001), .B(pc_val), .C(pc_inc));
+	adder		pc_incr(.A(32'h00000001), .B(pc_val), .C(pc_inc));
 
-	adder			branch_add(.A(s_imm), .B(pc_inc), .C(pc_br));
+	adder		branch_add(.A(s_imm), .B(pc_inc), .C(pc_br));
 
 	pc_val_mux	pc_mux(.ctrl(pc_next_c), .in0(pc_inc), .in1(pc_br), .in2({pc_val[31:26], instr[25:0]}), .out(pc_next));
 
-	sign_ext		s_e(.in(instr[15:0]), .out(s_imm));
+	sign_ext	s_e(.in(instr[15:0]), .out(s_imm));
 
 	reg_file 	r_f(.clk(clk),.we(we_c), .ra1(instr[25:21]), .ra2(instr[20:16]), .wa(dest_reg), .rd1(A), .rd2(rd2), .wd(result) );
 	
@@ -48,7 +48,7 @@ module datapath(
 	
 	mux2to1		mux21_argB(.in0(rd2), .in1(s_imm), .ctrl(argB_c), .out(B));
 	
-	alu 			alu_uut(.A(A), .B(B), .C(C), .mode(alu_c), .zero(zero));	
+	alu 		alu_uut(.A(A), .B(B), .C(C), .mode(alu_c), .zero(zero));	
 	
 	mux2to1		mux21_result(.in0(C), .in1(mem_read), .ctrl(result_c), .out(result));
 	

@@ -6,13 +6,14 @@
 # Grigoriy A. Sitkarev, <sitkarev@unixkomi.ru>
 #
 
-project         = cpu 
-sim_project	= cpu_tb 
+project         = cpu
+sim_project	= cpu_tb
 top-entity	= cpu
 sim_top-entity	= cpu_tb
 platform	= xc3s700an-fgg484
-sources		= adder.v aludec.v alu.v contr.v cpu_tb.v cpu.v data_mem_tb.v maindec.v mux2to1.v PC.v pc_val_mux.v ram.v reg_file.v rom2.v sign_ext.v 
-sim_sources	= cpu_tb.v datd_mem_tb.v  adder.v aludec.v alu.v contr.v cpu_tb.v cpu.v data_mem_tb.v maindec.v mux2to1.v PC.v pc_val_mux.v ram.v reg_file.v rom2.v sign_ext.v
+sources		= adder.v aludec.v alu.v contr.v cpu_tb.v cpu.v data_mem_tb.v datapath.v instr_mem.v maindec.v mux2to1.v PC.v pc_val_mux.v ram.v reg_file.v sign_ext.v  
+
+sim_sources	= datd_mem_tb.v  adder.v aludec.v alu.v contr.v cpu_tb.v cpu.v data_mem_tb.v maindec.v mux2to1.v PC.v pc_val_mux.v ram.v reg_file.v rom2.v sign_ext.v
  
 
 include-file	=  
