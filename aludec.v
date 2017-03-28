@@ -22,6 +22,7 @@ module aludec (
 		case (aluop)
 			2'b00: alu_c <= add_f; 
 			2'b01: alu_c <= subtr_f;
+			2'b10: alu_c <= or_f;
 		default:
 		(*full_case*)case(funct)
 			// R-type instructions

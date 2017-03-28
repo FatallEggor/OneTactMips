@@ -29,37 +29,14 @@ localparam T = 20;
 	// Inputs
 	reg clk;
 	reg reset;
-	/*reg argB_c;
-	reg [3:0] alu_c;
-	reg dest_reg_c;
-	reg we_c;
-	reg result_c;
-	reg mw_c;
-	reg branch_c;*/
 
 	// Outputs
-	wire led0;
-	wire led1;
-	wire led2;
-	wire led3;
-	wire led4;
-	wire led5;
-	wire led6;
-	wire led7;
 	wire [31:0] bus;
 
 	// Instantiate the Unit Under Test (UUT)
 	cpu uut (
 		.clk(clk), 
 		.reset(reset), 
-		.led0(led0), 
-		.led1(led1), 
-		.led2(led2), 
-		.led3(led3), 
-		.led4(led4), 
-		.led5(led5), 
-		.led6(led6), 
-		.led7(led7), 
 		.bus(bus)
 	);
 
@@ -75,28 +52,8 @@ localparam T = 20;
 		// Initialize Inputs
 		clk = 0;
 		reset = 1;
-		/*argB_c = 0;
-		alu_c = 0;
-		dest_reg_c = 0;
-		we_c = 0;
-		result_c = 0;
-		mw_c = 0;
-		branch_c = 0;*/
-
-		// Wait 100 ns for global reset to finish
 		#100;
-        
-		// Add stimulus here
-
 		reset = 0;
-		/*argB_c = 0;
-		alu_c = 4'b1000;
-		dest_reg_c = 0;
-		we_c = 1;
-		result_c = 0;
-		mw_c = 0;
-		branch_c = 0;*/
-
 	end
       
 endmodule

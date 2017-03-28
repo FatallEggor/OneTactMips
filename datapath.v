@@ -12,22 +12,14 @@ module datapath(
 	output wire [5:0]op_c,
 	output wire [5:0]funct,	
 	output wire zero,
-	input wire argB_c, dest_reg_c, result_c, we_c,
+	input wire argB_c, argA_c, dest_reg_c, result_c, we_c, ext_c,
 	input wire [1:0] pc_next_c,
-	input wire [3:0] alu_c, 
+	input wire [3:0] alu_c 
 	
-/*	output wire led0,
-	output wire led1,
-	output wire led2,
-	output wire led3,
-	output wire led4,
-	output wire led5,
-	output wire led6,
-	output wire led7,*/
-	output wire [31:0] bus 
+//	output wire [31:0] bus 
 	);
 	
-	wire [31:0]  A, B, rd2, C, s_imm, result; 
+	wire [31:0]  A, B, rd2, rd1, C, s_imm, result, shamt; 
 	wire [31:0] pc_next, pc_inc, pc_br;
 	wire [4:0] dest_reg;
 
@@ -40,11 +32,15 @@ module datapath(
 
 	pc_val_mux	pc_mux(.ctrl(pc_next_c), .in0(pc_inc), .in1(pc_br), .in2({pc_val[31:26], instr[25:0]}), .out(pc_next));
 
-	sign_ext	s_e(.in(instr[15:0]), .out(s_imm));
+	sign_ext	s_e_imm(.ext_c(ext_c), .in(instr[15:0]), .out(s_imm));
 
-	reg_file 	r_f(.clk(clk),.we(we_c), .ra1(instr[25:21]), .ra2(instr[20:16]), .wa(dest_reg), .rd1(A), .rd2(rd2), .wd(result) );
-	
+	reg_file 	r_f(.clk(clk),.we(we_c), .ra1(instr[25:21]), .ra2(instr[20:16]), .wa(dest_reg), .rd1(rd1), .rd2(rd2), .wd(result) );
+
 	mux2to1		#(.SIZE(5))mux21_dest(.in0(instr[15:11]), .in1(instr[20:16]), .ctrl(dest_reg_c), .out(dest_reg));
+	
+	ext		ext_sh(.in(instr[10:6]), .out(shamt));
+
+	mux2to1		mux21_argA(.in0(rd1), .in1(shamt), .ctrl(argA_c), .out(A));
 	
 	mux2to1		mux21_argB(.in0(rd2), .in1(s_imm), .ctrl(argB_c), .out(B));
 	
@@ -59,7 +55,6 @@ module datapath(
 	assign op_c = instr[31:26];
 	assign funct = instr[5:0];
 
-	assign bus = instr /*pc_val result read_data*/ ;
-//	assign {led0, led1, led2, led3, led4, led5, led6, led7} = {argB_c, dest_reg_c, we_c, result_c, mw_c, pc_next_c, zero, 1'b0}; 
+//	assign bus = instr /*pc_val result read_data*/ ;
 
 endmodule

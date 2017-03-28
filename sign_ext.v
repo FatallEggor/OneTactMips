@@ -1,8 +1,17 @@
-module sign_ext(
-	input wire [15:0] in,
-	output wire [31:0] out
+module sign_ext
+	#(parameter SIZE = 16)
+	(
+	input wire ext_c,
+
+	input wire [SIZE-1:0] in,
+	output reg [31:0] out
 	);
-
-	assign out = {{16{in[15]}}, in};
-
+	
+	always @*
+		case(ext_c)
+		1'b0:
+			out = {{SIZE{in[SIZE-1]}}, in};
+		1'b1:
+			out = {in,{32-SIZE{1'b0}}};
+	endcase
 endmodule

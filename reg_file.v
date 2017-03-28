@@ -1,4 +1,4 @@
-`include "registers.v"
+`include "./include/registers.v"
 
 module reg_file(
 	input wire clk,
@@ -16,16 +16,18 @@ module reg_file(
 
 	reg [31:0] rf [31:0];
 	
-/*	initial 
+	initial 
 		begin
-		rf[s1] = 32'h00000002;
-		rf[s2] = 32'h00000001;//32'h43214321;
-		rf[s3] = 32'h00000001;
-		rf[s4] = 32'h00000000;
-		rf[a1] = 32'h00000000;
-		
-		rf[gp] = 32'hffffffff;
-		end*/
+/*		rf[`ZERO] = 32'h00000000;
+		rf[`S1] = 32'h00000002;
+		rf[`S2] = 32'h00000002;//32'h43214321;
+		rf[`S3] = 32'h00000001;
+		rf[`S4] = 32'h00000000;
+		rf[`A1] = 32'h00000000;
+		rf[`S5] = 32'h10000002;
+*/
+		$readmemh("reg_init.data", rf, 0, 31);
+		end
 		
 	always @(posedge clk)
 	if (we)
