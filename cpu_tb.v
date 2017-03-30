@@ -32,12 +32,30 @@ localparam T = 20;
 
 	// Outputs
 	wire [31:0] bus;
+	wire led0;
+	wire led1;
+	wire led2;
+	wire led3;
+	wire led4;
+	wire led5;
+	wire led6;
+	wire led7;
+
+
 
 	// Instantiate the Unit Under Test (UUT)
 	cpu uut (
 		.clk(clk), 
-		.reset(reset), 
-		.bus(bus)
+		.reset(reset),
+		.led0(led0),
+		.led1(led1),
+		.led2(led2),
+		.led3(led3),
+		.led4(led4),
+		.led5(led5),
+		.led6(led6),
+		.led7(led7) 
+		//.bus(bus)
 	);
 
    always

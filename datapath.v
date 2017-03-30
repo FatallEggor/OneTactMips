@@ -2,26 +2,28 @@ module datapath(
 	input wire clk,
 	input wire reset,
 	
-	input wire [31:0] instr,	
-	output wire [31:0] pc_val,
+	input wire [31:0]	instr,	
+	output wire [31:0]	pc_val,
 	
-	output wire [31:0] mem_addr,
-	output wire [31:0] mem_write,
-	input wire [31:0] mem_read,
+	output wire [31:0]	mem_addr,
+	output wire [31:0]	mem_write,
+	input wire [31:0]	mem_read,
 
-	output wire [5:0]op_c,
-	output wire [5:0]funct,	
-	output wire zero,
-	input wire argB_c, argA_c, dest_reg_c, result_c, we_c, ext_c,
-	input wire [1:0] pc_next_c,
-	input wire [3:0] alu_c 
+	output wire [5:0]	op_c,
+	output wire [5:0]	funct,	
+	output wire		zero,
+
+	input wire		argB_c, dest_reg_c, we_c, ext_c, sh_d_c,
+	input wire [1:0]	pc_next_c, result_c, 
+	input wire [3:0]	alu_c, 
 	
 //	output wire [31:0] bus 
+	output wire [7:0]	leds
 	);
 	
-	wire [31:0]  A, B, rd2, rd1, C, s_imm, result, shamt; 
-	wire [31:0] pc_next, pc_inc, pc_br;
-	wire [4:0] dest_reg;
+	wire [31:0]	A, B, rd2, C, s_imm, result; 
+	wire [31:0]	pc_next, pc_inc, pc_br, shifted;
+	wire [4:0]	dest_reg;
 
 	PC		pc(.ctrl(clk), .reset(reset), .in(pc_next), .out(pc_val));
 
@@ -34,19 +36,17 @@ module datapath(
 
 	sign_ext	s_e_imm(.ext_c(ext_c), .in(instr[15:0]), .out(s_imm));
 
-	reg_file 	r_f(.clk(clk),.we(we_c), .ra1(instr[25:21]), .ra2(instr[20:16]), .wa(dest_reg), .rd1(rd1), .rd2(rd2), .wd(result) );
+	reg_file 	r_f(.clk(clk),.we(we_c), .ra1(instr[25:21]), .ra2(instr[20:16]), .wa(dest_reg), .rd1(A), .rd2(rd2), .wd(result), .leds(leds));
 
 	mux2to1		#(.SIZE(5))mux21_dest(.in0(instr[15:11]), .in1(instr[20:16]), .ctrl(dest_reg_c), .out(dest_reg));
 	
-	ext		ext_sh(.in(instr[10:6]), .out(shamt));
-
-	mux2to1		mux21_argA(.in0(rd1), .in1(shamt), .ctrl(argA_c), .out(A));
-	
 	mux2to1		mux21_argB(.in0(rd2), .in1(s_imm), .ctrl(argB_c), .out(B));
 	
-	alu 		alu_uut(.A(A), .B(B), .C(C), .mode(alu_c), .zero(zero));	
+	alu 		alu_uut(.A(A), .B(B), .C(C), .mode(alu_c), .zero(zero));
+
+	shifter		shift(.sh_d_c(sh_d_c), .shamt(instr[10:6]), .in(rd2), .out(shifted));
 	
-	mux2to1		mux21_result(.in0(C), .in1(mem_read), .ctrl(result_c), .out(result));
+	mux3to1		mux31_result(.in0(C), .in1(mem_read), .in2(shifted), .ctrl(result_c), .out(result));
 	
 	
 	assign mem_addr = C;

@@ -23,7 +23,6 @@ localparam //functions
 	 nor_f = 4'b0011,
 	 slt_f = 4'b0100,
 	 nand_f = 4'b0101,
-	 sll_f = 4'b0000,
 	 
 	 //arithmetic
 	 add_f = 4'b1000,
@@ -49,8 +48,6 @@ localparam //functions
 			
 		nor_f:
 			C = ~(A | B);
-		sll_f:
-			C = A << B;
 
 		//arithmetic
 		

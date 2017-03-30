@@ -31,6 +31,9 @@
 `define SLT_F		6'b101010
 `define NAND_F		6'b101011
 
+`define SLL_F		6'b000000
+`define SRL_F		6'b000010
+
 //arithmetic
 `define ADD_F		6'b100000
 `define ADDU_F		6'b100001

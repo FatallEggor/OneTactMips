@@ -4,8 +4,8 @@ module ram (
 	input wire we,
 	input wire [31:0] addr,
 	input wire [31:0] d_in,
-	output wire [31:0] d_out,
-	wire [7:0] leds
+	output wire [31:0] d_out
+//	wire [7:0] leds
 	);
 
 	reg [31:0] data [31:0];
@@ -39,5 +39,5 @@ module ram (
 	end
 
 	assign d_out = data[addr];
-	assign leds = data[8][7:0];
+//	assign leds = data[8][7:0];
 endmodule
