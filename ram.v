@@ -5,10 +5,9 @@ module ram (
 	input wire [31:0] addr,
 	input wire [31:0] d_in,
 	output wire [31:0] d_out
-//	wire [7:0] leds
 	);
 
-	reg [31:0] data [31:0];
+	reg [31:0] data [1024:0];
 	
 	initial
 		begin
@@ -35,9 +34,8 @@ module ram (
 	always @(posedge clk)
 	begin
 		if (we)
-			data[addr] <= d_in;
+			data[addr[31:2]] <= d_in;
 	end
 
-	assign d_out = data[addr];
-//	assign leds = data[8][7:0];
+	assign d_out = data[addr[31:2]];
 endmodule

@@ -63,9 +63,9 @@ function imm(command, regs, op_cs, func_cs)
 	
 	op_c = lshift(op_cs[$1], 26)
 #	printf "op_c %X\n", op_c
-	rs = lshift(regs[$2], 21)
+	rs = lshift(regs[$3], 21)
 #	printf "rs %s\t%X\t%X\n", $3, regs[$3], rs
-	rt = lshift(regs[$3], 16)
+	rt = lshift(regs[$2], 16)
 #	printf "rt %X\n", rt
 	imm_arg = strtonum($4)
 #	printf "imm_ard %X\n", imm_arg

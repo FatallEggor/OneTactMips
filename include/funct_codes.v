@@ -6,18 +6,14 @@
 `define SW_OP		6'b101011
 
 `define ADDI_OP		6'b001000
-`define LUI_OP		6'b001111
+`define ANDI_OP		6'b001100
 `define ORI_OP		6'b001101
+`define LUI_OP		6'b001111
 
-`define AND_OP 		6'b100100 
-`define OR_OP		6'b100101
-`define XOR_OP		6'b100110
-`define NOR_OP		6'b100111
-`define SLT_OP		6'b101010
- 
 `define BEQ_OP		6'b000100
+`define BNE_OP		6'b000101
 `define J_OP		6'b000010
-`define ALTI_OP		6'b001010
+`define SLTI_OP		6'b001010
 
 `define MULT_OP		6'b011000
 `define DIV_OP		6'b011010

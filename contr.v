@@ -24,13 +24,13 @@ module contr(
 
 	);
 	
-	wire [1:0] aluop;
+	wire [2:0] aluop;
 	
-	maindec	main_dec(.funct(funct), .op_c(op_c), .argB_c(argB_c), .dest_reg_c(dest_reg_c), .we_c(we_c), .result_c(result_c), .mw_c(mw_c), .branch(branch), .j_c(j_c), .ext_c(ext_c), .sh_d_c(sh_d_c), .aluop(aluop));
+	maindec	main_dec(.funct(funct), .op_c(op_c), .argB_c(argB_c), .dest_reg_c(dest_reg_c), .we_c(we_c), .result_c(result_c), .mw_c(mw_c), .beq(beq), .bne(bne), .j_c(j_c), .ext_c(ext_c), .sh_d_c(sh_d_c), .aluop(aluop));
 
 	aludec	alu_dec(.funct(funct), .aluop(aluop), .alu_c(alu_c) );
 	
-	assign branch_c = zero & branch;
+	assign branch_c =(~zero & bne) | (zero & beq);
 	assign pc_next_c = {j_c, branch_c};
 
 	

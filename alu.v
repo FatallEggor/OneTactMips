@@ -8,11 +8,11 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module alu(
-    input wire [3:0] mode,
-    input wire [31:0] A,
-    input wire [31:0] B,
-    output reg [31:0] C,
-	 output reg zero
+	input wire [3:0]	mode,
+	input wire [31:0]	A,
+	input wire [31:0]	B,
+	output reg [31:0]	C,
+	output reg		zero
     );
 	 
 localparam //functions
@@ -48,6 +48,9 @@ localparam //functions
 			
 		nor_f:
 			C = ~(A | B);
+
+		slt_f:
+			C = (A < B) ? 32'h00000001 : 32'h00000000;
 
 		//arithmetic
 		

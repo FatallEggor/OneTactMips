@@ -6,13 +6,13 @@ module instr_mem (
 	output wire [31:0] data
 	);
 	
-	reg [31:0] mem [31:0];
+	reg [31:0] mem [1536:0];
 
 	initial
 		begin
 		$readmemh("instr.data", mem, 0, 31);
 		end
 
-	assign data = mem[addr];
+	assign data = mem[addr[31:2]];
 
 endmodule

@@ -10,10 +10,11 @@ module pc_val_mux
 	);
 
 	always @*
-		(*full_case*) case(ctrl)
+		 case(ctrl)
 			2'd0: out <= in0;
 			2'd1: out <= in1;
 			2'd2: out <= in2;
+			default: out <= 2'd0;
 		endcase
 
 endmodule

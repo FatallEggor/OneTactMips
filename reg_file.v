@@ -27,9 +27,9 @@ module reg_file(
 	if (we)
 		rf[wa] <= wd;
 
-	assign rd1 = (ra1 != 32'b0) ? rf[ra1] : 0;
-	assign rd2 = (ra2 != 32'b0) ? rf[ra2] : 0;
+	assign rd1 = rf[ra1];
+	assign rd2 = rf[ra2];
 	
-	//assign leds = rf [`S0][7:0];
+	assign leds = rf [`S0][7:0];
 
 endmodule

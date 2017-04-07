@@ -9,45 +9,48 @@ module maindec
 	output wire		dest_reg_c,
 	output wire		we_c,
 	output wire		mw_c,
-	output wire		branch,
+	output wire		beq,
+	output wire		bne,
 	output wire		j_c,
 	output wire		ext_c,
 	output wire		sh_d_c,
 	output wire[1:0]	result_c,
-	output wire[1:0]	aluop
+	output wire[2:0]	aluop
 	);
 	
-	reg [9:0] op_c_s;
+	reg [11:0] op_c_s;
 	reg [1:0] f_c_s;
 
-	assign {argB_c, dest_reg_c, we_c, result0_c, mw_c, branch, j_c, ext_c, aluop} =  op_c_s;
-
-	assign {result1_c, sh_d_c} = f_c_s;
+	assign {argB_c, dest_reg_c, we_c, result0_c, mw_c, beq, bne, j_c, ext_c, aluop} =  op_c_s;
 
 	always @(op_c or funct)
 	begin
 		case (op_c)
-			`RTYPE_OP: op_c_s <= 10'b00100000_10; // RTYPE	
+			`RTYPE_OP: op_c_s <= 12'b001000000_111; 
 			
-			`LW_OP: op_c_s <= 10'b11110000_00; // LW
-			`SW_OP: op_c_s <= 10'b10001000_00; // SW
+			`LW_OP: op_c_s <= 12'b111100000_000; 
+			`SW_OP: op_c_s <= 12'b100010000_000; 
 			
-			`J_OP: op_c_s <= 10'b00000010_00; // J
-			`BEQ_OP: op_c_s <= 10'b00000100_01; // BEQ
+			`J_OP: op_c_s <= 12'b000000010_000; 
+			`BEQ_OP: op_c_s <= 12'b000001000_001; 
+			`BNE_OP: op_c_s <= 12'b000000100_001; 
 			
-			`ADDI_OP: op_c_s <= 10'b11100000_00; // ADDI
-			`LUI_OP: op_c_s <= 10'b11100001_00; // LUI 
-			`ORI_OP: op_c_s <= 10'b11100000_10; // ORI
-			default: op_c_s <= 10'b00000000000; //NOTHING
+			`ADDI_OP: op_c_s <= 12'b111000000_000; 
+			`LUI_OP: op_c_s <= 12'b111000001_000; 
+			`ORI_OP: op_c_s <= 12'b111000000_010; 
+			`SLTI_OP: op_c_s <= 12'b111000000_011; 
+			`ANDI_OP: op_c_s <= 12'b111000000_100; 
+			default: op_c_s <= 12'b0000000000_000; //NOTHING
 		endcase
 
-		case (funct)
-			`SLL_F: f_c_s <= 2'b11;
-			`SRL_F: f_c_s <= 2'b10;
-			default: f_c_s <=2'b00;
+		case ({op_c, funct})
+			{`RTYPE_OP,`SLL_F}: f_c_s <= 2'b11;
+			{`RTYPE_OP,`SRL_F}: f_c_s <= 2'b10;
+			default: f_c_s <= 2'b00;
 		endcase
 	end	
 				
+	assign {result1_c, sh_d_c} = f_c_s;
 	assign result_c = {result1_c, result0_c};
 
 endmodule

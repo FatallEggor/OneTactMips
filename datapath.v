@@ -17,22 +17,24 @@ module datapath(
 	input wire [1:0]	pc_next_c, result_c, 
 	input wire [3:0]	alu_c, 
 	
-//	output wire [31:0] bus 
+	output wire [31:0]	bus, 
 	output wire [7:0]	leds
 	);
 	
 	wire [31:0]	A, B, rd2, C, s_imm, result; 
-	wire [31:0]	pc_next, pc_inc, pc_br, shifted;
+	wire [31:0]	pc_next, pc_inc, pc_br, shifted, s_imm_sll2;
 	wire [4:0]	dest_reg;
 
 	PC		pc(.ctrl(clk), .reset(reset), .in(pc_next), .out(pc_val));
 
 
-	adder		pc_incr(.A(32'h00000001), .B(pc_val), .C(pc_inc));
+	adder		pc_incr(.A(32'h00000004), .B(pc_val), .C(pc_inc));
 
-	adder		branch_add(.A(s_imm), .B(pc_inc), .C(pc_br));
+	sll2		sll2_imm(.in(s_imm), .out(s_imm_sll2));
 
-	pc_val_mux	pc_mux(.ctrl(pc_next_c), .in0(pc_inc), .in1(pc_br), .in2({pc_val[31:26], instr[25:0]}), .out(pc_next));
+	adder		branch_add(.A(s_imm_sll2), .B(pc_inc), .C(pc_br));
+
+	pc_val_mux	pc_mux(.ctrl(pc_next_c), .in0(pc_inc), .in1(pc_br), .in2({pc_val[31:28], instr[25:0], 2'b00}), .out(pc_next));
 
 	sign_ext	s_e_imm(.ext_c(ext_c), .in(instr[15:0]), .out(s_imm));
 
@@ -55,6 +57,6 @@ module datapath(
 	assign op_c = instr[31:26];
 	assign funct = instr[5:0];
 
-//	assign bus = instr /*pc_val result read_data*/ ;
+	assign bus = instr /*pc_val result read_data*/ ;
 
 endmodule

@@ -11,9 +11,9 @@ sim_project	= cpu_tb
 top-entity	= cpu
 sim_top-entity	= cpu_tb
 platform	= xc3s700an-fgg484
-sources		= adder.v aludec.v alu.v contr.v cpu.v data_mem_tb.v datapath.v instr_mem.v maindec.v shifter.v mux3to1.v mux2to1.v PC.v pc_val_mux.v ram.v reg_file.v sign_ext.v  
+sources		= adder.v aludec.v alu.v contr.v cpu.v data_mem_tb.v datapath.v instr_mem.v maindec.v shifter.v mux3to1.v mux2to1.v PC.v pc_val_mux.v ram.v reg_file.v sign_ext.v sll2.v 
 
-sim_sources	=  cpu_tb.v adder.v aludec.v alu.v contr.v cpu.v data_mem_tb.v datapath.v instr_mem.v maindec.v shifter.v mux3to1.v mux2to1.v PC.v pc_val_mux.v ram.v reg_file.v sign_ext.v  
+sim_sources	=  cpu_tb.v adder.v aludec.v alu.v contr.v cpu.v data_mem_tb.v datapath.v instr_mem.v maindec.v shifter.v mux3to1.v mux2to1.v PC.v pc_val_mux.v ram.v reg_file.v sign_ext.v sll2.v  
 
 
 #include-file	=  
