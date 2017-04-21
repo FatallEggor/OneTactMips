@@ -13,6 +13,7 @@
 `define BEQ_OP		6'b000100
 `define BNE_OP		6'b000101
 `define J_OP		6'b000010
+`define JAL_OP		6'b000011
 `define SLTI_OP		6'b001010
 
 `define MULT_OP		6'b011000
@@ -34,4 +35,7 @@
 `define ADD_F		6'b100000
 `define ADDU_F		6'b100001
 `define SUBTR_F		6'b100010
+
+//branches
+`define JR_F		6'b001000
 

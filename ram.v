@@ -31,7 +31,7 @@ module ram (
 			data[31] = {32'heeeeeee3};
 		end
 		
-	always @(posedge clk)
+	always @(negedge clk)
 	begin
 		if (we)
 			data[addr[31:2]] <= d_in;

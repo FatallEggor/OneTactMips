@@ -50,7 +50,7 @@ function sh_imm(command, regs, op_cs, func_cs)
 #	printf "rs %s\t%X\t%X\n", $3, regs[$3], rs
 	rt = lshift(regs[$2], 16)
 #	printf "rt %X\n", rt
-	imm_arg = strtonum($3)
+	imm_arg = and(strtonum($3), 0x000000000000ffff)
 	#printf "imm_ard %X\n", imm_arg
 
 	out = or(op_c, rs, rt, imm_arg)
@@ -60,15 +60,15 @@ function sh_imm(command, regs, op_cs, func_cs)
 function imm(command, regs, op_cs, func_cs)
 {
 	$0 = command
-	
 	op_c = lshift(op_cs[$1], 26)
 #	printf "op_c %X\n", op_c
 	rs = lshift(regs[$3], 21)
 #	printf "rs %s\t%X\t%X\n", $3, regs[$3], rs
 	rt = lshift(regs[$2], 16)
 #	printf "rt %X\n", rt
-	imm_arg = strtonum($4)
-#	printf "imm_ard %X\n", imm_arg
+#	imm_arg = strtonum($4)
+	imm_arg = and(strtonum($4), 0x000000000000ffff)
+#	printf "arg %s\timm_arg %X\tfimm_arg %X\n", $4, imm_arg, fimm_arg
 
 	out = or(op_c, rs, rt, imm_arg)
 	return out
@@ -84,7 +84,7 @@ function pc_addr(command, regs, op_cs, func_cs)
 #	printf "rs %s\t%X\t%X\n", $3, regs[$3], rs
 	rt = lshift(regs[$3], 16)
 #	printf "rt %X\n", rt
-	imm_arg = strtonum($4)
+	imm_arg = and(strtonum($4), 0x000000000000ffff)
 #	printf "imm_ard %X\n", imm_arg
 
 	out = or(op_c, rs, rt, imm_arg)
@@ -117,7 +117,7 @@ function bs_addr(command, regs, op_cs, func_cs)
 	FS_old = FS
 	FS = "("
 	$0 = $3
-	imm_arg = strtonum($1)
+	imm_arg = and(strtonum($1), 0x000000000000ffff)
 #	printf "imm_arg %X\t%s\n", imm_arg, $1
 
 	FS = ")"
@@ -127,5 +127,26 @@ function bs_addr(command, regs, op_cs, func_cs)
 	out = or(op_c, rs, rt, imm_arg)
 
 	FS = FS_old
+	return out
+}
+
+function reg_addr(command, regs, op_cs, func_cs)
+{
+	$0 = command
+	
+	op_c = lshift(op_cs[$1], 26)
+	#printf "op_c %X\n", op_c
+	rs = lshift(regs[$2], 21)
+	#printf "rs %s\t%X\t%X\n", $3, regs[$3], rs
+	rt = 0 
+	#printf "rt %X\n", rt
+	rd = 0
+	#printf "rd %X\n", rd
+	shamt = 0 
+	#printf "shamt %X\n", shamt
+	func_c = func_cs[$1]
+	#printf "func_c %X\n", func_c
+
+	out = or(op_c, rs, rt, rd, shamt, func_c)
 	return out
 }

@@ -39,7 +39,7 @@ module aludec (
 				6'b101011: alu_c <= nand_f;
 				6'b101010: alu_c <= slt_f;
 				default:
-					alu_c <= 4'bxxx;
+					alu_c <= 4'bxxxx;
 			endcase
 
 			default:

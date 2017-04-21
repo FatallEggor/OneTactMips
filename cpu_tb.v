@@ -45,7 +45,7 @@ localparam T = 20;
 
 	// Instantiate the Unit Under Test (UUT)
 	cpu uut (
-		.clk(clk), 
+		.clk_in(clk), 
 		.reset(reset),
 		.led0(led0),
 		.led1(led1),
@@ -70,7 +70,7 @@ localparam T = 20;
 		// Initialize Inputs
 		clk = 0;
 		reset = 1;
-		#100;
+//		#100;
 		reset = 0;
 	end
       

@@ -15,7 +15,7 @@ function init_regs(regs)
 function init_oplist(oplist)
 {
 
-	ops = "add rtype addu rtype subtr rtype subu rtype and rtype or rtype xor rtype nor rtype slt rtype sll shift srl shift lw bs_addr sw bs_addr addi imm lui sh_imm  ori imm  slti imm andi imm j imm_addr beq pc_addr bne pc_addr"
+	ops = "add rtype addu rtype sub rtype subu rtype and rtype or rtype xor rtype nor rtype slt rtype sll shift srl shift lw bs_addr sw bs_addr addi imm lui sh_imm  ori imm  slti imm andi imm j imm_addr jal imm_addr jr reg_addr beq pc_addr bne pc_addr"
 	n = split (ops, opl)
 	for (i = 1; i <= n; i += 2) {
 		oplist[opl[i]] = opl[i+1]
@@ -26,7 +26,7 @@ function init_oplist(oplist)
 
 function init_opcodes(op_cs)
 {
-	ops = "add 0x0 addu 0x0 subtr 0x0 subu 0x0 and 0x0 or 0x0 xor 0x0 nor 0x0 slt 0x0 sll 0x0 srl 0x0 lw 0x23 sw 0x2B addi 0x8 lui 0xF  ori 0xD  slti 0xA andi 0xc j 0x2 bne 0x5 beq 0x4"
+	ops = "add 0x0 addu 0x0 sub 0x0 subu 0x0 and 0x0 or 0x0 xor 0x0 nor 0x0 slt 0x0 sll 0x0 srl 0x0 lw 0x23 sw 0x2B addi 0x8 lui 0xF  ori 0xD  slti 0xA andi 0xc j 0x2 jal 0x3 jr 0x0 bne 0x5 beq 0x4"
 
 	n = split (ops, opcs)
 	for (i = 1; i <= n; i += 2) {
@@ -37,7 +37,7 @@ function init_opcodes(op_cs)
 function init_funccodes(func_cs)
 {
 
-	funcs = "add 0x20 addu 0x21 subtr 0x22 subu 0x23 and 0x24 or 0x25 xor 0x26  nor 0x27 slt 0x2A sll 0x0 srl 0x2"	
+	funcs = "add 0x20 addu 0x21 sub 0x22 subu 0x23 and 0x24 or 0x25 xor 0x26  nor 0x27 slt 0x2A sll 0x0 srl 0x2 jr 0x8"	
 	n = split (funcs, funccs)
 	for (i = 1; i <= n; i += 2) {
 		func_cs[funccs[i]] = strtonum(funccs[i+1])

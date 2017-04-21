@@ -6,51 +6,74 @@ module maindec
 	input wire [5:0]	funct,
 		
 	output wire		argB_c,
-	output wire		dest_reg_c,
+	output wire [1:0]	dest_reg_c,
 	output wire		we_c,
 	output wire		mw_c,
 	output wire		beq,
 	output wire		bne,
 	output wire		j_c,
+	output wire		jr_c,
 	output wire		ext_c,
+	output wire		wd_c,
 	output wire		sh_d_c,
-	output wire[1:0]	result_c,
-	output wire[2:0]	aluop
+	output wire [1:0]	result_c,
+	output wire [2:0]	aluop
 	);
 	
-	reg [11:0] op_c_s;
-	reg [1:0] f_c_s;
+	reg [13:0] op_c_s;
+	reg [2:0] f_c_s;
+	reg we;
 
-	assign {argB_c, dest_reg_c, we_c, result0_c, mw_c, beq, bne, j_c, ext_c, aluop} =  op_c_s;
+	assign {we_c, argB_c, dest_reg_c, result0_c, mw_c, beq, bne, j_c, ext_c, wd_c, aluop} =  op_c_s;
 
 	always @(op_c or funct)
 	begin
 		case (op_c)
-			`RTYPE_OP: op_c_s <= 12'b001000000_111; 
+			`RTYPE_OP: 
+			begin
+				if (funct == `JR_F)
+					we = 1'b0;
+				else
+					we = 1'b1;
+
+				op_c_s <=	{we, 13'b0_00_00_0_0_0_0_0_111}; 			
+			end
+			`LW_OP: op_c_s <=	14'b1_1_01_10_0_0_0_0_0_000; 
+			`SW_OP: op_c_s <=	14'b0_1_00_01_0_0_0_0_0_000; 
 			
-			`LW_OP: op_c_s <= 12'b111100000_000; 
-			`SW_OP: op_c_s <= 12'b100010000_000; 
+			`JAL_OP: op_c_s <=	14'b1_0_10_00_0_0_1_0_1_000; 
+			`J_OP: op_c_s <=	14'b0_0_00_00_0_0_1_0_0_000; 
+			`BEQ_OP: op_c_s <=	14'b0_0_00_00_1_0_0_0_0_001; 
+			`BNE_OP: op_c_s <=	14'b0_0_00_00_0_1_0_0_0_001; 
 			
-			`J_OP: op_c_s <= 12'b000000010_000; 
-			`BEQ_OP: op_c_s <= 12'b000001000_001; 
-			`BNE_OP: op_c_s <= 12'b000000100_001; 
-			
-			`ADDI_OP: op_c_s <= 12'b111000000_000; 
-			`LUI_OP: op_c_s <= 12'b111000001_000; 
-			`ORI_OP: op_c_s <= 12'b111000000_010; 
-			`SLTI_OP: op_c_s <= 12'b111000000_011; 
-			`ANDI_OP: op_c_s <= 12'b111000000_100; 
-			default: op_c_s <= 12'b0000000000_000; //NOTHING
+			`ADDI_OP: op_c_s <=	14'b1_1_01_00_0_0_0_0_0_000; 
+			`LUI_OP: op_c_s <=	14'b1_1_01_00_0_0_0_1_0_000; 
+			`ORI_OP: op_c_s <=	14'b1_1_01_00_0_0_0_0_0_010; 
+			`SLTI_OP: op_c_s <=	14'b1_1_01_00_0_0_0_0_0_011; 
+			`ANDI_OP: op_c_s <=	14'b1_1_01_00_0_0_0_0_0_100; 
+			default: 
+				begin
+					op_c_s <=	14'b0_0_00_00_0_0_0_0_0_000; //NOTHING
+				end
 		endcase
 
-		case ({op_c, funct})
-			{`RTYPE_OP,`SLL_F}: f_c_s <= 2'b11;
-			{`RTYPE_OP,`SRL_F}: f_c_s <= 2'b10;
-			default: f_c_s <= 2'b00;
+		case ({op_c, funct}) 
+			{`RTYPE_OP, `SLL_F}: 
+				f_c_s <=	3'b110;
+			{`RTYPE_OP, `SRL_F}:
+				f_c_s <=	3'b100;
+			{`RTYPE_OP, `JR_F}: 
+				f_c_s <=	3'b001;
+			default:
+				f_c_s <=	3'b000;
 		endcase
-	end	
+			
+
+	end
+
+
 				
-	assign {result1_c, sh_d_c} = f_c_s;
+	assign {result1_c, sh_d_c, jr_c} = f_c_s;
 	assign result_c = {result1_c, result0_c};
 
 endmodule
