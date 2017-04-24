@@ -1,7 +1,5 @@
 `define	ZERO	5'b00000
 
-`define J_OP 6'b000010
-
 `define	AT	5'b00001
 
 `define	V0	5'b00010
@@ -39,5 +37,6 @@
 
 `define	GP	5'b11100
 `define	SP	5'b11101
-`define	FP	5'b11110
-`define	RA	5'b11111
+
+`define	RA	5'b11110
+`define	US	5'b11111

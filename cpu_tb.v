@@ -1,24 +1,9 @@
 `timescale 1ns / 1ps
 
 ////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer:
-//
+// Company: FEIncorparated
+// Engineer: FatallEggor
 // Create Date:   11:39:10 12/25/2016
-// Design Name:   cpu
-// Module Name:   /home/egor/Projects/verilog/contr_tests/final/mips1/cpu_tb.v
-// Project Name:  mips1
-// Target Device:  
-// Tool versions:  
-// Description: 
-//
-// Verilog Test Fixture created by ISE for module: cpu
-//
-// Dependencies:
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -29,6 +14,7 @@ localparam T = 20;
 	// Inputs
 	reg clk;
 	reg reset;
+	reg rx_fem;
 
 	// Outputs
 	wire [31:0] bus;
@@ -40,6 +26,7 @@ localparam T = 20;
 	wire led5;
 	wire led6;
 	wire led7;
+	wire tx_fem;
 
 
 
@@ -47,6 +34,8 @@ localparam T = 20;
 	cpu uut (
 		.clk_in(clk), 
 		.reset(reset),
+		.rx_fem(rx_fem),
+		.tx_fem(tx_fem),
 		.led0(led0),
 		.led1(led1),
 		.led2(led2),
@@ -54,7 +43,7 @@ localparam T = 20;
 		.led4(led4),
 		.led5(led5),
 		.led6(led6),
-		.led7(led7) 
+		.led7(led7)
 		//.bus(bus)
 	);
 
@@ -68,10 +57,41 @@ localparam T = 20;
 
 	initial begin
 		// Initialize Inputs
-		clk = 0;
-		reset = 1;
-//		#100;
-		reset = 0;
+		clk = 1'b0;
+		reset = 1'b1;
+		rx_fem = 1'b1;
+		#20;
+
+		reset = 1'b0;
+		rx_fem = 1'b0;
+		#1280;
+		
+		rx_fem = 1'b1;
+		#1280;
+		
+		rx_fem = 1'b0;
+		#1280;
+		
+		rx_fem = 1'b1;
+		#1280;
+		
+		rx_fem = 1'b0;
+		#1280;
+		
+		rx_fem = 1'b1;
+		#1280;
+		
+		rx_fem = 1'b0;
+		#1280;
+		
+		rx_fem = 1'b1;
+		#1280;
+		
+		rx_fem = 1'b0;
+		#1280;
+		
+		rx_fem = 1'b1;
+		#1280;
 	end
       
 endmodule

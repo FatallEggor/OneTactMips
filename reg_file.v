@@ -1,19 +1,20 @@
 `include "./include/registers.v"
 
 module reg_file(
-	input wire clk,
-	input wire we,//for write enable
+	input wire		clk,
+	input wire		we,//for write enable
 
-	input wire [4:0] ra1,//
-	input wire [4:0] ra2,//for read  addresses
-	input wire [4:0] wa,//for write address
+	input wire [4:0]	ra1,//
+	input wire [4:0]	ra2,//for read  addresses
+	input wire [4:0]	wa,//for write address
+	input wire [1:0]	us,//for uart statistic
 
 	
-	output wire [31:0] rd1,// for read data
-	output wire [31:0] rd2,//
-	input wire [31:0] wd,//for write data
+	output wire [31:0]	rd1,// for read data
+	output wire [31:0]	rd2,//
+	input wire [31:0]	wd,//for write data
 	
-	output wire [7:0] leds
+	output wire [7:0]	leds
 );
 
 	reg [31:0] rf [31:0];
@@ -24,11 +25,11 @@ module reg_file(
 		end
 		
 	always @(posedge clk)
-	if (we)
-		rf[wa] <= wd;
+		if (we)
+			rf[wa] <= wd;
 
-	assign rd1 = rf[ra1];
-	assign rd2 = rf[ra2];
+	assign rd1 = (ra1 == `US)? {30'b0, us} : rf[ra1];
+	assign rd2 = (ra2 == `US)? {30'b0, us} : rf[ra2];
 	
 	assign leds = rf [`S0][7:0];
 

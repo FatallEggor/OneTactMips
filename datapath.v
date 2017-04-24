@@ -1,4 +1,4 @@
-`define RA	5'b11111
+`include "./include/registers.v"
 
 module datapath(
 	input wire clk,
@@ -16,7 +16,7 @@ module datapath(
 	output wire		zero,
 
 	input wire		argB_c, we_c, ext_c, sh_d_c, wd_c,
-	input wire [1:0]	dest_reg_c, result_c, 
+	input wire [1:0]	dest_reg_c, result_c, us, 
 	input wire [2:0]	pc_next_c,
 	input wire [3:0]	alu_c, 
 	
@@ -41,7 +41,7 @@ module datapath(
 
 	sign_ext	s_e_imm(.ext_c(ext_c), .in(instr[15:0]), .out(s_imm));
 
-	reg_file 	r_f(.clk(clk),.we(we_c), .ra1(instr[25:21]), .ra2(instr[20:16]), .wa(dest_reg), .rd1(A), .rd2(rd2), .wd(wd), .leds(leds));
+	reg_file 	r_f(.clk(clk),.we(we_c), .ra1(instr[25:21]), .ra2(instr[20:16]), .wa(dest_reg), .us(us), .rd1(A), .rd2(rd2), .wd(wd), .leds(leds));
 
 	mux3to1		#(.SIZE(5))mux31_dest(.in0(instr[15:11]), .in1(instr[20:16]), .in2(`RA), .ctrl(dest_reg_c), .out(dest_reg));
 	
