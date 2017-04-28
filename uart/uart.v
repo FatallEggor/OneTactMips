@@ -2,8 +2,8 @@
  	#(
 	parameter	DBIT = 		8,
 			SB_TICK = 	16,
-			DVSR = 		1,
-			DVSR_BIT = 	1,
+			DVSR = 		1,//81
+			DVSR_BIT = 	1,//7
 			FIFO_W =	2
 	)
 	(

@@ -15,6 +15,7 @@ localparam T = 20;
 	reg clk;
 	reg reset;
 	reg rx_fem;
+	reg rx_m;
 
 	// Outputs
 	wire [31:0] bus;
@@ -27,6 +28,7 @@ localparam T = 20;
 	wire led6;
 	wire led7;
 	wire tx_fem;
+	wire tx_m;
 
 
 
@@ -34,6 +36,8 @@ localparam T = 20;
 	cpu uut (
 		.clk_in(clk), 
 		.reset(reset),
+		.rx_m(rx_m),
+		.tx_m(tx_m),
 		.rx_fem(rx_fem),
 		.tx_fem(tx_fem),
 		.led0(led0),
@@ -59,38 +63,38 @@ localparam T = 20;
 		// Initialize Inputs
 		clk = 1'b0;
 		reset = 1'b1;
-		rx_fem = 1'b1;
+		rx_m = 1'b1;
 		#20;
 
 		reset = 1'b0;
-		rx_fem = 1'b0;
+		rx_m = 1'b0;
 		#1280;
 		
-		rx_fem = 1'b1;
+		rx_m = 1'b1;
 		#1280;
 		
-		rx_fem = 1'b0;
+		rx_m = 1'b0;
 		#1280;
 		
-		rx_fem = 1'b1;
+		rx_m = 1'b1;
 		#1280;
 		
-		rx_fem = 1'b0;
+		rx_m = 1'b0;
 		#1280;
 		
-		rx_fem = 1'b1;
+		rx_m = 1'b1;
 		#1280;
 		
-		rx_fem = 1'b0;
+		rx_m = 1'b0;
 		#1280;
 		
-		rx_fem = 1'b1;
+		rx_m = 1'b1;
 		#1280;
 		
-		rx_fem = 1'b0;
+		rx_m = 1'b0;
 		#1280;
 		
-		rx_fem = 1'b1;
+		rx_m = 1'b1;
 		#1280;
 	end
       

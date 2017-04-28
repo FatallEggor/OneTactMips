@@ -7,7 +7,7 @@ module reg_file(
 	input wire [4:0]	ra1,//
 	input wire [4:0]	ra2,//for read  addresses
 	input wire [4:0]	wa,//for write address
-	input wire [1:0]	us,//for uart statistic
+	input wire [3:0]	us,//for uart statistic
 
 	
 	output wire [31:0]	rd1,// for read data
@@ -28,8 +28,8 @@ module reg_file(
 		if (we)
 			rf[wa] <= wd;
 
-	assign rd1 = (ra1 == `US)? {30'b0, us} : rf[ra1];
-	assign rd2 = (ra2 == `US)? {30'b0, us} : rf[ra2];
+	assign rd1 = (ra1 == `US)? {28'b0, us} : rf[ra1];
+	assign rd2 = (ra2 == `US)? {28'b0, us} : rf[ra2];
 	
 	assign leds = rf [`S0][7:0];
 

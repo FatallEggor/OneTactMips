@@ -16,9 +16,9 @@ module datapath(
 	output wire		zero,
 
 	input wire		argB_c, we_c, ext_c, sh_d_c, wd_c,
-	input wire [1:0]	dest_reg_c, result_c, us, 
+	input wire [1:0]	dest_reg_c, result_c,
 	input wire [2:0]	pc_next_c,
-	input wire [3:0]	alu_c, 
+	input wire [3:0]	us, alu_c, 
 	
 	output wire [31:0]	bus, 
 	output wire [7:0]	leds
