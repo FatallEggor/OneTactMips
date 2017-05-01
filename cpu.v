@@ -1,4 +1,5 @@
-module cpu(
+module cpu
+(
 	input wire	clk_in,
 	input wire	reset,
 
@@ -53,13 +54,15 @@ module cpu(
 
 	wire [31:0]	instr, pc_val, mem_addr, mem_write, mem_read, ram_out;
 	wire [5:0]	op_c, funct;
-	wire		zero, argB_c, we_c, ext_c, wd_c, io_ram_c, io_uart_fem_c, io_uart_m_c, clk;
-	wire [1:0]	dest_reg_c, result_c, io_read_c;
+	wire		zero, argB_c, we_c, wd_c, io_ram_c, io_uart_fem_c, io_uart_m_c, clk;
+	wire [1:0]	dest_reg_c, result_c, ext_c, io_read_c;
 	wire [2:0]	pc_next_c;
 	wire [3:0]	us, alu_c; 
 	wire [7:0]	leds, uart_fem_r, uart_m_r;
-	wire [31:0]	bus;
-	wire		counter;
+	wire [31:0]	bus, tmr_ctrl;
+	wire		counter, tmr_overflow; 
+	wire [15:0]	tmr_cntr;
+
 	reg 		counter_reg = 1'b1;
 
 	always @ (posedge clk_in)
@@ -70,13 +73,15 @@ module cpu(
 
 	contr		contr_u ( .op_c(op_c), .funct(funct), .zero(zero), .argB_c(argB_c), .dest_reg_c(dest_reg_c), .result_c(result_c),.we_c(we_c), .ext_c(ext_c), .wd_c(wd_c), .sh_d_c(sh_d_c), .pc_next_c(pc_next_c), .alu_c(alu_c));
 
-	datapath	datapath_u ( .clk(clk), .reset(reset), .instr(instr), .pc_val(pc_val), .mem_addr(mem_addr), .mem_write(mem_write), .mem_read(mem_read), .op_c(op_c), .funct(funct), .zero(zero), .argB_c(argB_c), .dest_reg_c(dest_reg_c), .result_c(result_c), .us(us), .we_c(we_c), .ext_c(ext_c),.wd_c(wd_c),  .sh_d_c(sh_d_c), .pc_next_c(pc_next_c), .alu_c(alu_c), .leds(leds) , .bus(bus));
+	datapath	datapath_u ( .clk(clk), .reset(reset), .instr(instr), .pc_val(pc_val), .mem_addr(mem_addr), .mem_write(mem_write), .mem_read(mem_read), .op_c(op_c), .funct(funct), .zero(zero), .argB_c(argB_c), .dest_reg_c(dest_reg_c), .result_c(result_c), .we_c(we_c), .ext_c(ext_c),.wd_c(wd_c),  .sh_d_c(sh_d_c), .pc_next_c(pc_next_c), .alu_c(alu_c), .us(us), .tmr_ctrl(tmr_ctrl), .tmr_cntr(tmr_cntr), .tmr_overflow(tmr_overflow), .leds(leds), .bus(bus));
 
-	instr_mem	instr_mem (.addr(pc_val), .data(instr));
+	instr_mem	instr_mem (.addr(pc_val[10:0]), .data(instr));
 
-	io_contr	io_c(.addr(mem_addr), .op_c(op_c), .io_ram_c(io_ram_c), .io_uart_fem_c(io_uart_fem_c), .io_uart_m_c(io_uart_m_c), .io_read_c(io_read_c));
+	timer		tmr (.clk(clk), .reset(~tmr_ctrl[31]), .scale(tmr_ctrl[30:16]), .period(tmr_ctrl[15:0]), .cntr(tmr_cntr), .overflow(tmr_overflow));
 
-	ram		data_mem (.clk(clk), .we(io_ram_c), .addr(mem_addr), .d_in(mem_write), .d_out(ram_out)/*, .leds(leds)*/);
+	io_contr	io_c (.addr(mem_addr), .op_c(op_c), .io_ram_c(io_ram_c), .io_uart_fem_c(io_uart_fem_c), .io_uart_m_c(io_uart_m_c), .io_read_c(io_read_c));
+
+	ram		data_mem (.clk(clk), .we(io_ram_c), .addr(mem_addr[11:0]), .d_in(mem_write), .d_out(ram_out)/*, .leds(leds)*/);
 
 	uart		uart_fem (.clk(clk), .reset(reset), .rd_uart(io_read_c[0]), .wr_uart(io_uart_fem_c), .rx(rx_fem), .w_data(mem_write[7:0]), .tx_full(us[1]), .rx_empty(us[0]), .tx(tx_fem), .r_data(uart_fem_r));
 

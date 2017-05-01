@@ -16,7 +16,7 @@ module tick_gen
 			count_reg <= count_next;
 	
 	always @*
-		begin
+	begin
 		count_next = count_reg;
 		tick = 1'b0;
 
@@ -27,6 +27,6 @@ module tick_gen
 			end
 		else
 			count_next = count_reg + 1;
-		end
+	end
 	
 endmodule

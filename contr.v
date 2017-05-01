@@ -15,7 +15,7 @@ module contr(
 	output wire		argB_c,
 	output wire [1:0]	dest_reg_c,
 	output wire		we_c,
-	output wire		ext_c,
+	output wire [1:0]	ext_c,
 	output wire		wd_c,
 	output wire		sh_d_c,
 	output wire [2:0]	pc_next_c,

@@ -2,12 +2,12 @@
 module ram (
 	input wire clk,
 	input wire we,
-	input wire [31:0] addr,
+	input wire [11:0] addr,
 	input wire [31:0] d_in,
 	output wire [31:0] d_out
 	);
 
-	reg [31:0] data [1024:0];
+	reg [31:0] data [1023:0];
 	
 	initial
 		begin
@@ -34,8 +34,8 @@ module ram (
 	always @(negedge clk)
 	begin
 		if (we)
-			data[addr[31:2]] <= d_in;
+			data[addr[11:2]] <= d_in;
 	end
 
-	assign d_out = data[addr[31:2]];
+	assign d_out = data[addr[11:2]];
 endmodule

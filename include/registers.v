@@ -33,10 +33,10 @@
 `define	T9	5'b11001
 
 `define	K0	5'b11010
-`define	K1	5'b11011
+`define	SP	5'b11011//K1
 
-`define	GP	5'b11100
-`define	SP	5'b11101
+`define	RA	5'b11100//GP
+`define	US	5'b11101//SP
 
-`define	RA	5'b11110
-`define	US	5'b11111
+`define	TCON	5'b11110//FP
+`define	TMR	5'b11111//RA

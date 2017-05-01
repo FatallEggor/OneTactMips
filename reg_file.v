@@ -7,13 +7,16 @@ module reg_file(
 	input wire [4:0]	ra1,//
 	input wire [4:0]	ra2,//for read  addresses
 	input wire [4:0]	wa,//for write address
-	input wire [3:0]	us,//for uart statistic
 
 	
 	output wire [31:0]	rd1,// for read data
 	output wire [31:0]	rd2,//
 	input wire [31:0]	wd,//for write data
 	
+	input wire [3:0]	us,//for uart state
+	input wire [15:0]	tmr_cntr,//for timer counter
+	output wire [31:0]	tmr_ctrl,//for timer controll
+
 	output wire [7:0]	leds
 );
 
@@ -28,9 +31,11 @@ module reg_file(
 		if (we)
 			rf[wa] <= wd;
 
-	assign rd1 = (ra1 == `US)? {28'b0, us} : rf[ra1];
-	assign rd2 = (ra2 == `US)? {28'b0, us} : rf[ra2];
+	assign rd1 = (ra1 == `US)? {28'b0, us} : ((ra1 == `TMR)? {16'b0, tmr_cntr} : rf[ra1]);
+	assign rd2 = (ra2 == `US)? {28'b0, us} : ((ra1 == `TMR)? {16'b0, tmr_cntr} : rf[ra2]);
+
+	assign tmr_ctrl = rf[`TCON];
 	
-	assign leds = rf [`S0][7:0];
+	assign leds = rf [`V0][7:0];
 
 endmodule
