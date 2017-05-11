@@ -150,3 +150,24 @@ function reg_addr(command, regs, op_cs, func_cs)
 	out = or(op_c, rs, rt, rd, shamt, func_c)
 	return out
 }
+
+
+#cipher-optimised instructions
+
+function cs(command, regs, op_cs, func_cs)
+{
+	$0 = command
+	op_c = lshift(op_cs[$1], 26)
+#	printf "op_c %X\n", op_c
+	rs = lshift(regs[$3], 21)
+#	printf "rs %s\t%X\t%X\n", $3, regs[$3], rs
+	rt = lshift(regs[$2], 16)
+#	printf "rt %X\n", rt
+#	imm_arg = strtonum($4)
+	imm_arg = 0x0000
+#	printf "arg %s\timm_arg %X\tfimm_arg %X\n", $4, imm_arg, fimm_arg
+
+	out = or(op_c, rs, rt, imm_arg)
+	return out
+}
+

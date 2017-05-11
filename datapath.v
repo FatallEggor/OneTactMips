@@ -16,8 +16,8 @@ module datapath(
 	output wire		zero,
 
 	input wire		argB_c, we_c, sh_d_c, wd_c,
-	input wire [1:0]	dest_reg_c, result_c, ext_c,
-	input wire [2:0]	pc_next_c,
+	input wire [1:0]	dest_reg_c, ext_c,
+	input wire [2:0]	pc_next_c, result_c,
 	input wire [3:0]	us, alu_c, 
 
 	input wire		tmr_overflow,
@@ -29,7 +29,7 @@ module datapath(
 	);
 	
 	wire [31:0]	A, B, rd2, C, s_imm, result, wd; 
-	wire [31:0]	pc_next, pc_inc, pc_br, shifted, s_imm_sll2;
+	wire [31:0]	pc_next, pc_inc, pc_br, shifted, sub, s_imm_sll2;
 	wire [4:0]	dest_reg;
 
 	PC		pc(.ctrl(clk), .reset(reset), .in(pc_next), .out(pc_val));
@@ -54,8 +54,10 @@ module datapath(
 	alu 		alu_uut(.A(A), .B(B), .C(C), .mode(alu_c), .zero(zero));
 
 	shifter		shift(.sh_d_c(sh_d_c), .shamt(instr[10:6]), .in(rd2), .out(shifted));
+
+	subst		subs(.in(A), .out(sub));
 	
-	mux3to1		mux31_result(.in0(C), .in1(mem_read), .in2(shifted), .ctrl(result_c), .out(result));
+	mux4to1		mux41_result(.in0(C), .in1(mem_read), .in4(shifted), .in2(sub), .ctrl(result_c), .out(result));
 	
 	mux2to1		mux21_wd(.in0(result), .in1(pc_inc), .ctrl(wd_c), .out(wd));
 	
@@ -66,6 +68,6 @@ module datapath(
 	assign op_c = instr[31:26];
 	assign funct = instr[5:0];
 
-	assign bus = instr /*pc_val result read_data*/ ;
+	assign bus = sub /*pc_val result read_data*/ ;
 
 endmodule

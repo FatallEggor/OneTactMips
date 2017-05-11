@@ -27,7 +27,7 @@ module reg_file(
 		$readmemh("reg_init.data", rf, 0, 31);
 		end
 		
-	always @(posedge clk)
+	always @(negedge clk)
 		if (we)
 			rf[wa] <= wd;
 

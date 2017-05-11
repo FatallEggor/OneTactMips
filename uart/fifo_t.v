@@ -20,7 +20,7 @@ module fifo_t
 	wire wr_en;
 
 	//register file write operation
-	always @(posedge clk)
+	always @(negedge clk)
 		if (wr_en)
 			array_reg[w_ptr_reg] <= w_data;
 	// register file read operation
@@ -29,7 +29,7 @@ module fifo_t
 	assign wr_en = wr & ~full_reg;
 
 	// registers for pointers
-	always @(posedge clk, posedge reset)
+	always @(negedge clk, posedge reset)
 		begin
 		if (reset)
 			begin

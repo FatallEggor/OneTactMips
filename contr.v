@@ -19,7 +19,7 @@ module contr(
 	output wire		wd_c,
 	output wire		sh_d_c,
 	output wire [2:0]	pc_next_c,
-	output wire [1:0]	result_c,
+	output wire [2:0]	result_c,
 	output wire [3:0]	alu_c
 
 	);

@@ -19,6 +19,9 @@
 `define MULT_OP		6'b011000
 `define DIV_OP		6'b011010
 
+//cipher optimised
+`define CSUB_OP		6'b110001
+
 //funct
 //logical
 `define AND_F		6'b100100

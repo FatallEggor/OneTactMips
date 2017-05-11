@@ -55,15 +55,15 @@ module cpu
 	wire [31:0]	instr, pc_val, mem_addr, mem_write, mem_read, ram_out;
 	wire [5:0]	op_c, funct;
 	wire		zero, argB_c, we_c, wd_c, io_ram_c, io_uart_fem_c, io_uart_m_c, clk;
-	wire [1:0]	dest_reg_c, result_c, ext_c, io_read_c;
-	wire [2:0]	pc_next_c;
+	wire [1:0]	dest_reg_c, ext_c, io_read_c;
+	wire [2:0]	pc_next_c, result_c;
 	wire [3:0]	us, alu_c; 
 	wire [7:0]	leds, uart_fem_r, uart_m_r;
 	wire [31:0]	bus, tmr_ctrl;
 	wire		counter, tmr_overflow; 
 	wire [15:0]	tmr_cntr;
 
-	reg 		counter_reg = 1'b1;
+	reg 		counter_reg = 1'b0;
 
 	always @ (posedge clk_in)
 		counter_reg <= counter;
