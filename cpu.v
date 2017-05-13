@@ -54,8 +54,8 @@ module cpu
 
 	wire [31:0]	instr, pc_val, mem_addr, mem_write, mem_read, ram_out;
 	wire [5:0]	op_c, funct;
-	wire		zero, argB_c, we_c, wd_c, io_ram_c, io_uart_fem_c, io_uart_m_c, clk;
-	wire [1:0]	dest_reg_c, ext_c, io_read_c;
+	wire		zero, argA_c, argB_c, we_c, wd_c, io_ram_c, io_uart_fem_c, io_uart_m_c, clk;
+	wire [1:0]	dest_reg_c, ext_c, io_read_c, sh_c;
 	wire [2:0]	pc_next_c, result_c;
 	wire [3:0]	us, alu_c; 
 	wire [7:0]	leds, uart_fem_r, uart_m_r;
@@ -71,9 +71,9 @@ module cpu
 	assign counter = counter_reg + 1'b1;
 	assign clk = counter;
 
-	contr		contr_u ( .op_c(op_c), .funct(funct), .zero(zero), .argB_c(argB_c), .dest_reg_c(dest_reg_c), .result_c(result_c),.we_c(we_c), .ext_c(ext_c), .wd_c(wd_c), .sh_d_c(sh_d_c), .pc_next_c(pc_next_c), .alu_c(alu_c));
+	contr		contr_u ( .op_c(op_c), .funct(funct), .zero(zero), .argA_c(argA_c), .argB_c(argB_c), .dest_reg_c(dest_reg_c), .result_c(result_c),.we_c(we_c), .ext_c(ext_c), .wd_c(wd_c), .sh_c(sh_c), .pc_next_c(pc_next_c), .alu_c(alu_c));
 
-	datapath	datapath_u ( .clk(clk), .reset(reset), .instr(instr), .pc_val(pc_val), .mem_addr(mem_addr), .mem_write(mem_write), .mem_read(mem_read), .op_c(op_c), .funct(funct), .zero(zero), .argB_c(argB_c), .dest_reg_c(dest_reg_c), .result_c(result_c), .we_c(we_c), .ext_c(ext_c),.wd_c(wd_c),  .sh_d_c(sh_d_c), .pc_next_c(pc_next_c), .alu_c(alu_c), .us(us), .tmr_ctrl(tmr_ctrl), .tmr_cntr(tmr_cntr), .tmr_overflow(tmr_overflow), .leds(leds), .bus(bus));
+	datapath	datapath_u ( .clk(clk), .reset(reset), .instr(instr), .pc_val(pc_val), .mem_addr(mem_addr), .mem_write(mem_write), .mem_read(mem_read), .op_c(op_c), .funct(funct), .zero(zero), .argA_c(argA_c), .argB_c(argB_c), .dest_reg_c(dest_reg_c), .result_c(result_c), .we_c(we_c), .ext_c(ext_c),.wd_c(wd_c),  .sh_c(sh_c), .pc_next_c(pc_next_c), .alu_c(alu_c), .us(us), .tmr_ctrl(tmr_ctrl), .tmr_cntr(tmr_cntr), .tmr_overflow(tmr_overflow), .leds(leds), .bus(bus));
 
 	instr_mem	instr_mem (.addr(pc_val[10:0]), .data(instr));
 

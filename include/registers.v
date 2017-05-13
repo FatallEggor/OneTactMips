@@ -40,3 +40,6 @@
 
 `define	TCON	5'b11110//FP
 `define	TMR	5'b11111//RA
+
+//$t1 = $t1 xor KEY[$t0]
+

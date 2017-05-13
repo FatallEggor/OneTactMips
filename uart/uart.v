@@ -2,9 +2,9 @@
  	#(
 	parameter	DBIT = 		8,
 			SB_TICK = 	16,
-			DVSR = 		1,//81
-			DVSR_BIT = 	1,//7
-			FIFO_W =	2
+			DVSR = 		81,//1
+			DVSR_BIT = 	7,//1
+			FIFO_W =	4
 	)
 	(
 	input wire		clk, reset,

@@ -12,12 +12,13 @@ module contr(
 	input wire [5:0]	op_c, 
 	input wire [5:0]	funct,
 
+	output wire		argA_c,
 	output wire		argB_c,
 	output wire [1:0]	dest_reg_c,
 	output wire		we_c,
 	output wire [1:0]	ext_c,
 	output wire		wd_c,
-	output wire		sh_d_c,
+	output wire [1:0]	sh_c,
 	output wire [2:0]	pc_next_c,
 	output wire [2:0]	result_c,
 	output wire [3:0]	alu_c
@@ -27,7 +28,7 @@ module contr(
 	wire [2:0] 	aluop;
 	wire 		jr_c;
 	
-	maindec	main_dec(.funct(funct), .op_c(op_c), .argB_c(argB_c), .dest_reg_c(dest_reg_c), .we_c(we_c), .result_c(result_c), .beq(beq), .bne(bne), .j_c(j_c), .jr_c(jr_c), .ext_c(ext_c), .wd_c(wd_c), .sh_d_c(sh_d_c), .aluop(aluop));
+	maindec	main_dec(.funct(funct), .op_c(op_c), .argA_c(argA_c), .argB_c(argB_c), .dest_reg_c(dest_reg_c), .we_c(we_c), .result_c(result_c), .beq(beq), .bne(bne), .j_c(j_c), .jr_c(jr_c), .ext_c(ext_c), .wd_c(wd_c), .sh_c(sh_c), .aluop(aluop));
 
 	aludec	alu_dec(.funct(funct), .aluop(aluop), .alu_c(alu_c) );
 	

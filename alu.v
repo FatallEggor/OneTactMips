@@ -26,7 +26,10 @@ localparam //functions
 	 
 	 //arithmetic
 	 add_f = 4'b1000,
-	 subtr_f = 4'b1001;
+	 subtr_f = 4'b1001,
+
+	 //cipher
+	 cxk_f = 4'b1100;
 	 
 	 
 	 
@@ -45,6 +48,9 @@ localparam //functions
 			
 		xor_f:
 			C = A ^ B;
+
+		cxk_f:
+			C = A + B;
 			
 		nor_f:
 			C = ~(A | B);

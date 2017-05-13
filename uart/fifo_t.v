@@ -16,7 +16,7 @@ module fifo_t
 	reg [B-1:0] array_reg [2**W-1:0]; // register array
 	reg [W-1:0] w_ptr_reg, w_ptr_next, w_ptr_succ;
 	reg [W-1:0] r_ptr_reg, r_ptr_next, r_ptr_succ;
-	reg full_reg = 0, empty_reg = 0, full_next = 0, empty_next = 0;
+	reg full_reg = 1'b0, empty_reg = 1'b1, full_next, empty_next;
 	wire wr_en;
 
 	//register file write operation

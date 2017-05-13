@@ -43,7 +43,7 @@ module subst
 	sub4[12] = 4'hb; sub4[13] = 4'h4; sub4[14] = 4'h2; sub4[15] = 4'hc; 
 	
 	sub5[0] = 4'h5; sub5[1] = 4'hd; sub5[2] = 4'hf; sub5[3] = 4'h6;
-	sub5[4] = 4'h9; sub5[5] = 4'hc; sub5[6] = 4'hc; sub5[7] = 4'ha;
+	sub5[4] = 4'h9; sub5[5] = 4'h2; sub5[6] = 4'hc; sub5[7] = 4'ha;
 	sub5[8] = 4'hb; sub5[9] = 4'h7; sub5[10] = 4'h8; sub5[11] = 4'h1; 
 	sub5[12] = 4'h4; sub5[13] = 4'h3; sub5[14] = 4'he; sub5[15] = 4'h0; 
 	

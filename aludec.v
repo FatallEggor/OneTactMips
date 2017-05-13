@@ -1,3 +1,5 @@
+`include "include/funct_codes.v"
+
 module aludec (
 	input wire [5:0] funct,
 	input wire [2:0] aluop,
@@ -5,7 +7,7 @@ module aludec (
 	output reg [3:0] alu_c
 	);
 	
-	localparam
+localparam
 	 //logical
 	 and_f = 4'b0000,
 	 or_f = 4'b0001,
@@ -16,7 +18,10 @@ module aludec (
 	 
 	 //arithmetic
 	 add_f = 4'b1000,
-	 subtr_f = 4'b1001;
+	 subtr_f = 4'b1001,
+
+	 //cipher
+	 cka_f = 4'b1100;
 
 	always @*
 		case (aluop)
@@ -30,14 +35,15 @@ module aludec (
 			3'b111:
 			case(funct)
 				// R-type instructions
-				6'b100000: alu_c <= add_f;
-				6'b100010: alu_c <= subtr_f;
-				6'b100100: alu_c <= and_f;
-				6'b100101: alu_c <= or_f;
-				6'b100110: alu_c <= xor_f;
-				6'b100111: alu_c <= nor_f;
-				6'b101011: alu_c <= nand_f;
-				6'b101010: alu_c <= slt_f;
+				`ADD_F: alu_c <= add_f;
+				`SUBTR_F: alu_c <= subtr_f;
+				`AND_F: alu_c <= and_f;
+				`OR_F: alu_c <= or_f;
+				`XOR_F: alu_c <= xor_f;
+				`NOR_F: alu_c <= nor_f;
+				`NAND_F: alu_c <= nand_f;
+				`SLT_F: alu_c <= slt_f;
+				`CKX_F: alu_c <= cka_f;
 				default:
 					alu_c <= 4'bxxxx;
 			endcase

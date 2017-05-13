@@ -20,7 +20,12 @@
 `define DIV_OP		6'b011010
 
 //cipher optimised
+//opcodes
 `define CSUB_OP		6'b110001
+//funccodes
+`define SLC_F		6'b110000
+`define SRC_F		6'b110001
+`define CKX_F		6'b110010
 
 //funct
 //logical
