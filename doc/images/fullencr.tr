@@ -1,0 +1,72 @@
+.PS
+define g_trans {
+	line down 0.575 
+	circle rad 0.05 fill 1 with .center at .end of last line
+	arrow left 0.35 from .center of last circle
+	G: box ht 0.25 wid 1.3 "преобразование g"
+	arrow left 0.225 from west of G
+	move up 0.2 from last box.n
+	box wid 0.2 ht 0.1 invisible "K\s-3$1\s0"
+	arrow from last box.s to G.n
+	move to last circle.c
+	line down 0.375
+	line down 0.5 left 2
+}
+
+define XOR {
+	line down 0.45
+	circle diam 0.25
+	line from last circle.s to last circle.n
+	line from last circle.w to last circle.e
+	line down 0.25 with .start at .s of last circle
+	line down 0.5 right 2
+}
+
+define last_g_trans {
+	line down 0.375 
+	circle rad 0.05 fill 1 with .center at .end of last line
+	arrow left 0.35 from .center of last circle
+	G: box ht 0.25 wid 1.3 "преобразование g"
+	arrow left 0.225 from west of G
+	move up 0.2 from last box.n
+	box wid 0.2 ht 0.1 invisible "K\s-3$1\s0"
+	arrow from last box.s to G.n
+	move to last circle.c
+	line down 0.375
+}
+
+define last_XOR {
+	line down 0.25
+	circle diam 0.25
+	line from last circle.s to last circle.n
+	line from last circle.w to last circle.e
+	line down 0.25 with .start at .s of last circle
+}
+
+Inc_block: box wid 2.5 ht 0.5 "входной 64-битный блок"
+
+line down 0.25 left 0.375 at 1/2 <Inc_block.s, Inc_block.sw>
+Left_block: box wid 1.25 ht 0.5 "32 бита" with .n at last line.s
+line down 0.25 right 0.375 at 1/2 <Inc_block.s, Inc_block.se>
+Right_block: box wid 1.25 ht 0.5 "32 бита" with .n at last line.e
+move to Left_block.s
+XOR()
+g_trans(2)
+line down 0.8 dotted
+last_XOR()
+Left_out: box wid 1.25 ht 0.5 "32 бита"
+line down 0.25 right 0.375 with .start at Left_out.s
+
+
+move to Right_block.s
+g_trans(1)
+XOR()
+line down 0.8 dotted
+last_g_trans(32)
+Right_out: box wid 1.25 ht 0.5 "32 бита"
+line down 0.25 left 0.375 with .start at Right_out.s
+move down 0.5 from Left_out.s
+move left 0.25
+right
+Outc_block: box wid 2.5 ht 0.5 "выходной 64-битный блок"
+.PE

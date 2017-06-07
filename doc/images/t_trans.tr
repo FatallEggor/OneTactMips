@@ -1,0 +1,23 @@
+.EQ
+delim $$
+.EN
+.PS
+box wid 4 "32-битный блок текста"
+
+move down 1 left 3.5
+for i = 0 to 7 do {
+	box wid 0.5 "4" "бита"; move up from last box.n; arrow down  
+	move right from last box.w
+}
+
+move down 1 left 3.5
+for i = 0 to 7 do {
+	box wid 0.5 sprintf("$S sub %g$", i)
+	move up from last box.n; arrow down  
+	arrow down from last box.s
+	move right from last box.w
+}
+move down 1 left 4
+right
+box wid 4 "32-битный блок шифртекста"
+.PE

@@ -1,0 +1,1 @@
+iconv -futf8 -tkoi8-r t_trans.tr | preconv -e KOI8R | groff -e -p -Tps -mru >/tmp/out.ps

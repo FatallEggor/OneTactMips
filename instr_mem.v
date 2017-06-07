@@ -10,7 +10,7 @@ module instr_mem (
 
 	initial
 		begin
-		$readmemh("instr.data", mem, 0, 31);
+		$readmemh("instr.data", mem, 0, 511);
 		end
 
 	assign data = mem[addr[10:2]];

@@ -1,0 +1,17 @@
+.PS
+bitsize = 4 / 32;
+op = 6 * bitsize;
+rs = 5 * bitsize;
+rt = rs;
+rd = rs;
+shamt = 5 * bitsize;
+funct = 6 * bitsize;
+move 1.35;
+[box width op "op";box  width rs "rs";box width rt "rt";box width rd "rd";box width shamt "shamt";box width funct "funct";
+"6 bits" at 6th last  box .s + (0, -0.15); 
+"5 bits" at 5th last  box .s + (0, -0.15); 
+"5 bits" at 4th last  box .s + (0, -0.15); 
+"5 bits" at 3th last  box .s + (0, -0.15); 
+"5 bits" at 2th last  box .s + (0, -0.15); 
+"6 bits" at 1th last  box .s + (0, -0.15);]
+.PE

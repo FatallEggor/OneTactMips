@@ -1,0 +1,7 @@
+.PS
+box  "op"; ;box  "rs";box "rt";box width 1.5 "imm";
+"6 bits" at 4th last  box .s + (0, -0.15); 
+"5 bits" at 3th last  box .s + (0, -0.15); 
+"5 bits" at 2th last  box .s + (0, -0.15); 
+"16 bits" at 1th last  box .s + (0, -0.15); 
+.PE

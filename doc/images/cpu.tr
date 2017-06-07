@@ -1,0 +1,367 @@
+.ps 7
+.po 0.1i
+.PS
+sc = 0.8
+define mux { [
+	mux_sc = sc/5	
+	move down mux_sc * $1 / 2;
+	In: line  up mux_sc * $1;
+	line down mux_sc * $1 / 3 right mux_sc;
+	Out: line down mux_sc * $1 / 3;
+	line down mux_sc * $1 / 3 left mux_sc;
+	]}
+
+CPU: [	
+move down 2*sc left 2*sc;
+Mux1: mux(4);
+move to Mux1.Out.c;
+line right 0.3*sc;
+move to last line.center + (-0.1*sc, 0.1*sc);"pc_next";
+move to last line.end;
+
+PC: [
+	right; box width 0.3*sc height 0.5*sc "\fBPC\fP";
+	line down 0.1*sc left 0.1*sc from last box.ne + (-0.05*sc,0);
+	line up 0.1*sc left 0.1*sc;
+	line up 0.2*sc from last box.n;
+	"clk" at end of last line + (0, 0.1*sc);
+	]
+
+PCout: line right 0.3*sc from PC.e;
+
+circle rad 0.03*sc fill 1 with .center at .center of last line;
+line down 1*sc from center of last line;
+Adder1: [ 
+	line right 0.15*sc \
+	then down 0.3*sc left 0.3*sc \
+	then left 0.3*sc \
+	then left 0.3*sc up 0.3*sc \
+	then right 0.3*sc \
+	then right 0.15*sc down 0.15*sc \
+	then right 0.15*sc up 0.15*sc \
+	then right 0.15*sc
+	] with .ne at last line.end + (0.15*sc, 0);
+
+"\fB+\fP" at Adder1.c + (0, -0.075*sc);
+
+line up 0.2*sc from Adder1.nw + (0.15*sc,0); "1" at last line.end + (0, 0.1*sc);
+
+L1: line down 2.5*sc from Adder1.s;
+circle rad 0.03*sc fill 1 with .center at 1/2 <L1.start, L1.end>;
+line to (Mux1.w, last circle.c) + (-0.05*sc, 0) from last circle.c;
+line to (last line.end, 1/5 <Mux1.In.start, Mux1.In.end>);
+line to 1/5 <Mux1.In.start, Mux1.In.end>;
+
+circle rad 0.03*sc fill 1 with .center at L1.end;
+line left 0.3*sc from L1.end;
+
+Adder2: [ 
+	line down 0.3*sc \
+	then left 0.15*sc down 0.15*sc \
+	then down 0.15*sc right 0.15*sc\
+	then down 0.3*sc \
+	then left 0.3*sc up 0.3*sc \
+	then up 0.3*sc \
+	then up 0.3*sc right 0.3*sc
+	] with .ne at last line.end + (0, 0.15*sc);
+
+"\fB+\fP" at Adder2.c + (-0.075*sc, 0);
+line from Adder2.w to (Mux1.In, Adder2) + (-0.1*sc,0); 
+Adder2_out: line to (last line.end, 2/5 <Mux1.In.start, Mux1.In.end>);
+line to 2/5 <Mux1.In.start, Mux1.In.end>;
+
+move to PCout.r;right;
+
+Instr_mem: [
+	box width 0.8*sc height 0.5*sc" " "\fBinstr_mem\fP";
+	"addr" at last box.nw + (0.2*sc,-0.2*sc);
+	"instr" at last box.nw + (0.6*sc,-0.2*sc);
+	] with .nw at PCout.end + (0,0.2*sc); 
+
+line right 0.2*sc from Instr_mem.ne + (0,-0.2*sc);
+
+Instr: line to ((last line.end, L1.end) + (0, -2.5*sc)) aligned """""32-bit instruction";
+line to (Adder2_out, Instr.end) + (-0.05*sc, 0);
+line to (last line.end, 3/5 <Mux1.In.start, Mux1.In.end>);
+line to 3/5 <Mux1.In.start, Mux1.In.end>;
+circle rad 0.03*sc fill 1 with .center at Instr.start;
+right;line 0.5*sc with .start at Instr.start "[25:21]""";
+
+Reg_file: [
+	Box: box width 1*sc height 1*sc "\fBreg_file\fP";
+	Ra1: "ra1" at 1/5 <last box.nw, last box.sw> + (0.1 *sc, 0);
+	Ra2: "ra2" at 2/5 <last box.nw, last box.sw> + (0.1 *sc, 0);
+	Wa: "wa" at 3/5 <last box.nw, last box.sw> + (0.1 *sc, 0);
+	Wd: "wd" at 4/5 <last box.nw, last box.sw> + (0.1 *sc, 0);
+	Rd1: "rd1" at 1/4 <last box.ne, last box.se> + (-0.1 *sc, 0);
+	Rd2: "rd2" at 2/4 <last box.ne, last box.se> + (-0.1 *sc, 0);
+	We: "we" at 3/4 <last box.ne, last box.se> + (-0.1 *sc, 0);
+
+	line down 0.1*sc left 0.1*sc from last box.nw + (0.6*sc,0);
+	line up 0.1*sc left 0.1*sc;
+	line up 0.2*sc from last box.nw + (0.5*sc,0);
+	"clk" at end of last line + (0, 0.1*sc);
+	] with .nw at last line.end + (0,0.5*sc);
+
+line left 0.5*sc with .start at 2/5 <Reg_file.Box.nw, Reg_file.Box.sw> "[20:16]""";
+circle rad 0.03*sc fill 1 with .center at last line.end;
+
+Mux2: mux(3) with .w at (Reg_file.w, 1/3 <Instr.start, Instr.end>);
+right;
+circle rad 0.03*sc fill 1 with .center at (Instr.c, 3/4 <Mux2.In.start, Mux2.In.end>);
+line to 3/4 <Mux2.In.start, Mux2.In.end> "[15:11]" above;
+circle rad 0.03*sc fill 1 with .center at (Instr.c, 1/2 <Mux2.In.start, Mux2.In.end>);
+line to 1/2 <Mux2.In.start, Mux2.In.end> "[20:16]""";
+line left 0.2*sc from 1/4 <Mux2.In.start, Mux2.In.end>
+"[$ra]" at last line.end + (-0.1*sc, 0);
+
+line from Mux2.Out.c right 0.1*sc
+line down 0.4*sc then left 1.6*sc ;
+line to (last line.end, Reg_file.Wa);
+line to Reg_file.Wa + (-0.1, 0);
+
+circle rad 0.03*sc fill 1 with .center at 2/3 <Instr.start, Instr.end>; 
+line right 0.6*sc "[15:0]""";
+
+Ext: [box height 0.3*sc width 0.8*sc "\fBext\fP";]
+
+move down 0.3*sc right 0.3*sc from Reg_file.ne + (-0.2*sc, -1.5*sc);
+
+Mux3: [
+	line right 0.4*sc \
+	then down 0.2*sc left 0.4*sc/3 
+	O: line left 0.4*sc/3 
+	line left 0.4*sc/3 up 0.2*sc; 
+	]
+Rd2: line from Reg_file.Rd2 + (0.1*sc, 0) to (Mux3.ne, Reg_file.Rd2) + (-0.1*sc, 0);
+line to Mux3.ne + (-0.1*sc, 0);
+
+Ext_out: line from Ext.e to (Mux3.nw, Ext.w) + (-0.02*sc, 0);
+line to (last line.end, Mux3.n) + (0, 0.1*sc);
+line to (Mux3.nw, last line.end) + (0.1*sc,0);
+line down 0.1*sc;
+
+circle rad 0.03*sc fill 1 with .center at Ext_out.end;
+line to (last circle.c, Adder2.s) + (0, 0.15*sc);
+line to Adder2.se + (0, 0.15*sc);
+
+
+ALU: [ 
+	A: line right 0.3*sc;
+	line right 0.15*sc down 0.15*sc \
+	then right 0.15*sc up 0.15*sc;
+	B: line right 0.3*sc;
+	Zero:line down 0.3*sc left 0.3*sc; 
+	O: line left 0.3*sc; 
+	line left 0.3*sc up 0.3*sc;
+	#then right 0.2*sc;
+	] with .nw at Mux3.sw + (0, -0.2*sc);
+
+"\fBALU\fP" at ALU.c + (0, -0.1*sc);
+line from Mux3.s to (Mux3.s, ALU.A);
+Rd1: line from Reg_file.Rd1 + (0.1*sc, 0) to (ALU.B.c, Reg_file.Rd1);
+line to ALU.B.c;
+
+circle rad 0.03*sc fill 1 with .center at Rd1.end;
+line up 0.7*sc;
+line to (Mux1.In, last line.end) + (-0.1*sc, 0);
+line to (last line.end, 4/5 <Mux1.In.start, Mux1.In.end>);
+line to 4/5 <Mux1.In.start, Mux1.In.end>;
+
+IO_contr:[
+	box height 0.3*sc width 0.8*sc "\fBio_contr\fP"
+	] with .center at (Ext.c, 1/2 <Instr.start, Instr.end>); 
+	
+
+
+Alu_out: line from 1/8 <ALU.O.end, ALU.O.start> to (1/8 <ALU.O.end, ALU.O.start>, Ext.n);
+
+RAM: [
+	Box: box width 0.8*sc height 0.8*sc "\fBdata_mem\fP";
+	Addr: "addr" at 1/4 <last box.nw, last box.ne> + (0, -0.08*sc);
+	D_in: "d_in" at 3/4 <last box.nw, last box.ne> + (0, -0.08*sc);
+	D_out: "d_out" at 1/2 <last box.sw, last box.se> + (0, 0.06*sc);
+	We: "we" at 1/4 <last box.ne, last box.se> + (-0.1*sc, 0);
+	] with .Box.nw at (ALU.w, Ext.n) + (0.1*sc, 0);
+line down 0.1*sc left 0.1*sc from 5/8 <RAM.Box.ne, RAM.Box.se>;
+line down 0.1*sc right 0.1*sc;
+line right 0.1*sc from 3/4 <RAM.Box.ne, RAM.Box.se>;
+"clk" at end of last line + (0.15*sc, 0);
+
+UART_fem: [
+	Box: box width 0.8*sc height 0.8*sc "\fBuart_fem\fP";
+	W_data: "w_data" at 2/4 <last box.nw, last box.ne> + (0, -0.08*sc);
+	D_out: "d_out" at 1/2 <last box.sw, last box.se> + (0, 0.06*sc);
+
+	] with .left at (RAM.e, RAM.c) + (0.5*sc, 0);
+
+line down 0.1*sc left 0.1*sc from 5/8 <UART_fem.Box.ne, UART_fem.Box.se>;
+line down 0.1*sc right 0.1*sc;
+line right 0.1*sc from 3/4 <UART_fem.Box.ne, UART_fem.Box.se>;
+"clk" at end of last line + (0.15*sc, 0);
+
+UART_m: [
+	Box: box width 0.8*sc height 0.8*sc "\fBuart_m\fP";
+	W_data: "w_data" at 2/4 <last box.nw, last box.ne> + (0, -0.08*sc);
+	D_out: "d_out" at 1/2 <last box.sw, last box.se> + (0, 0.06*sc);
+
+
+	] with .left at (UART_fem.e, UART_fem.c) + (0.4*sc, 0);
+
+line down 0.1*sc left 0.1*sc from 5/8 <UART_m.Box.ne, UART_m.Box.se>;
+line down 0.1*sc right 0.1*sc;
+line right 0.1*sc from 3/4 <UART_m.Box.ne, UART_m.Box.se>;
+"clk" at end of last line + (0.15*sc, 0);
+
+circle rad 0.03*sc fill 1 with .center at 1/4 <Alu_out.start, Alu_out.end>;
+
+line from last circle.c to (IO_contr.c, last circle.c);
+line to IO_contr.n;
+
+line from IO_contr.s to 1/4 <IO_contr.s, Ext.n>;
+
+Io_c: line to (UART_m.w, last line.end) + (-0.05*sc, 0);
+
+circle rad 0.03*sc fill 1 with .center at (RAM.Box.e, Io_c.c) + (0.1*sc, 0);
+line from last circle.c to (last circle.c, RAM.We) aligned "io_ram_c" "";
+line to (RAM.Box.e, RAM.We);
+
+circle rad 0.03*sc fill 1 with .center at (UART_fem.w, Io_c.end) + (-0.05*sc, 0);
+line from last circle.c to (last circle.c, 1/4 <UART_fem.Box.nw, UART_fem.Box.sw>) aligned "" "io_uart_fem_c";
+line to 1/4 <UART_fem.Box.nw, UART_fem.Box.sw>;
+
+line from Io_c.end to (Io_c.end, 1/4 <UART_m.Box.nw, UART_m.Box.sw>) aligned "" "io_uart_m_c";
+line to 1/4 <UART_m.Box.nw, UART_m.Box.sw>;
+
+circle rad 0.03*sc fill 1 with .center at Rd2.end;
+line from last circle.c to (RAM.e, last circle.c) + (0.05*sc, 0);
+
+Io_wr: line to (last line.end, RAM.ne) + (0, 0.1*sc);
+
+line to (RAM.D_in, last line.end);
+line to (RAM.D_in, RAM.n);
+
+circle rad 0.03*sc fill 1 with .center at 3/4<Io_wr.start, Io_wr.end>;
+Io_wr_m: line to (UART_m.W_data, last circle.c);
+line to (UART_m.W_data, UART_m.n);
+
+circle rad 0.03*sc fill 1 with .center at (UART_fem.W_data, Io_wr_m.c);
+line from last circle.c to (UART_fem.W_data, UART_fem.n);
+
+Mux4: [
+	In: line right 0.6*sc;
+	line down 0.2*sc left 0.6*sc/3;
+	Out: line left 0.6*sc/3;
+	line left 0.6*sc/3 up 0.2*sc; 
+	] with .center at (UART_fem.Box.s + (0, -0.3*sc));
+
+line from (RAM.D_out, RAM.s) to (RAM.D_out, Mux4.In) + (0, 0.1);
+line to (1/4 <Mux4.In.start, Mux4.In.end>, last line.end);
+line to 1/4 <Mux4.In.start, Mux4.In.end>;
+
+line from (UART_fem.D_out, UART_fem.Box.s) to 2/4 <Mux4.In.start, Mux4.In.end>
+
+line from (UART_m.D_out, UART_m.Box.s) to (UART_m.D_out, Mux4.In) + (0, 0.1);
+line to (3/4 <Mux4.In.start, Mux4.In.end>, last line.end);
+line to 3/4 <Mux4.In.start, Mux4.In.end>;
+
+Shifter: [
+	box height 0.3*sc width 0.8*sc "\fBshifter\fP";
+	] with .center at (UART_fem.c, ALU.c);
+
+Subst: [
+	box height 0.3*sc width 0.8*sc "\fBsubst\fP";
+	] with .center at (UART_m.c, ALU.c);
+
+Rd2_to_Subst: circle rad 0.03*sc fill 1 with .center at Io_wr.start;
+line from last circle.c to (Subst.c, last circle.c);
+line to Subst.n;
+
+circle rad 0.03*sc fill 1 with .center at (Shifter.c, Rd2_to_Subst.c);
+line from last circle.c to Shifter.n;
+
+Mux5: [
+	In: line right 0.8*sc;
+	line down 0.2*sc left 0.8*sc/3;
+	Out: line left 0.8*sc/3;
+	line left 0.8*sc/3 up 0.2*sc; 
+	] with .w at (Mux4.s + (-2*0.8/5*sc, -0.5*sc));
+
+circle rad 0.03*sc fill 1 with .center at (RAM.Box.w, 1/4 <Alu_out.start, Alu_out.end>) + (-0.05*sc, 0);
+ALU_out: line from last circle.c to (last circle.c, Mux5.n) + (0, 0.1*sc);
+line to (1/5 <Mux5.In.start, Mux5.In.end>, Mux5.n) + (0, 0.1*sc);
+line to 1/5 <Mux5.In.start, Mux5.In.end>;
+
+line from Mux4.s to 2/5 <Mux5.In.start, Mux5.In.end>;
+
+line from Shifter.s to 1/4 <Shifter.n, UART_fem.n>;
+line to (UART_m.e, last line.end) + (0.35*sc, 0);
+line to (last line.end, Mux5.n) + (0, 0.2*sc);
+line to (3/5 <Mux5.In.start, Mux5.In.end>, last line.end);
+line to 3/5 <Mux5.In.start, Mux5.In.end>;
+
+line from Subst.s to 1/4 <Subst.n, UART_m.n> + (0, 0.1);
+line to (UART_m.e, last line.end) + (0.45*sc, 0);
+line to (last line.end, Mux5.n) + (0, 0.1*sc);
+line to (4/5 <Mux5.In.start, Mux5.In.end>, last line.end);
+line to 4/5 <Mux5.In.start, Mux5.In.end>;
+
+Mux6: [
+	In: line right 0.8*sc;
+	line left 0.8*sc/3 up 0.2*sc; 
+	Out: line left 0.8*sc/3;
+	line down 0.2*sc left 0.8*sc/3;
+	] with .c at (Ext.c, Instr.end + (0, 0.3*sc));
+
+
+
+line from Mux5.s to (Mux5.s, Mux6.s) + (0, -0.1*sc);
+line to (1/3 <Mux6.In.end, Mux6.In.start>, last line.end);
+line to 1/3 <Mux6.In.end, Mux6.In.start>;
+
+line right 0.7*sc from L1.end;
+line to (last line.end, Mux6.s) + (0, -0.1*sc);
+line to (2/3 <Mux6.In.end, Mux6.In.start>, last line.end);
+line to 2/3 <Mux6.In.end, Mux6.In.start>;
+
+line up 0.3*sc from Mux6.n;
+line to (Instr.c, last line.end) + (-0.4*sc, 0);
+line to (last line.end, Reg_file.Wd);
+line to (Reg_file.Box.w, Reg_file.Wd);
+
+move to Mux1;
+move up 2*sc right 3*sc;
+
+Contr: [
+	Box: box width 1.7*sc height 2.5*sc rad 0.1*sc "\fBcontroller\fP";
+
+	Func: "func" at 6/7 <Box.nw, Box.sw> + (0.1*sc, 0); 
+	Op_c: "op_c" at 5/7 <Box.nw, Box.sw> + (0.1*sc, 0); 
+	Zero: "zero" at 1/7 <Box.nw, Box.sw> + (0.1*sc, 0); 
+
+	PC_next: "pc_next_c" at 1/10 <Box.ne, Box.se> + (-0.25*sc, 0); 
+	Result: "result_c" at 2/10 <Box.ne, Box.se> + (-0.25*sc, 0); 
+	Mw_c: "mw_c" at 3/10 <Box.ne, Box.se> + (-0.25*sc, 0); 
+	Alu_c: "alu_c" at 4/10 <Box.ne, Box.se> + (-0.25*sc, 0); 
+	Arg_B: "ArgB_c" at 5/10 <Box.ne, Box.se> + (-0.25*sc, 0); 
+	Dest_reg: "dest_reg_c" at 6/10 <Box.ne, Box.se> + (-0.25*sc, 0); 
+	We: "we_c" at 7/10 <Box.ne, Box.se> + (-0.25*sc, 0); 
+	]
+
+#inputs to controller
+#op_c
+line from Instr.start to (Instr.start, Contr.Op_c);
+circle rad 0.03*sc fill 1 with .center at last line.end;
+line from last circle.c to (Contr.Box.w,  Contr.Op_c) "[31:26]" "";
+#func
+circle rad 0.03*sc fill 1 with .center at (last line.start, Contr.Func);
+line from last circle.c to (Contr.Box.w,  Contr.Func) "[5:0]" "";
+#zero
+line down 0.15*sc from ALU.s + (0.1*sc, 0);
+line to ((Contr.Box.e, last line.end )+ (0.1*sc, 0));
+line to (last line.end, Contr.n) + (0, 0.1*sc);
+line to (Contr.w, last line.end) + (-0.1*sc, 0);
+line to (last line.end, Contr.Zero);
+line to  (Contr.Box.w,  Contr.Zero);
+]
+.PE

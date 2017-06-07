@@ -60,16 +60,16 @@ module cpu
 	wire [3:0]	us, alu_c; 
 	wire [7:0]	leds, uart_fem_r, uart_m_r;
 	wire [31:0]	bus, tmr_ctrl;
-	wire		counter, tmr_overflow; 
+	wire		tmr_overflow; 
 	wire [15:0]	tmr_cntr;
-
-	reg 		counter_reg = 1'b0;
+	wire [1:0]	counter;
+	reg [1:0]	counter_reg = 2'b10;
 
 	always @ (posedge clk_in)
 		counter_reg <= counter;
 	
 	assign counter = counter_reg + 1'b1;
-	assign clk = counter;
+	assign clk = counter[1];
 
 	contr		contr_u ( .op_c(op_c), .funct(funct), .zero(zero), .argA_c(argA_c), .argB_c(argB_c), .dest_reg_c(dest_reg_c), .result_c(result_c),.we_c(we_c), .ext_c(ext_c), .wd_c(wd_c), .sh_c(sh_c), .pc_next_c(pc_next_c), .alu_c(alu_c));
 

@@ -1,0 +1,60 @@
+.PS 
+left; box rad 0.1 "box" ljust; move down 0.25; left;arrow up left;right;
+move right 1.5;
+line  "line" above;
+move 1.8;
+arc;down;
+arc;left;arc;"""star" ht 1.5;up;arc rad 1.5;down;
+move 2;
+line up 0.5 left 1 then up 1 then down 1 right 2 then down 1 then down 1 left 2 then up 1 then right 1 up 0.5;
+move down 3;
+spline up 0.5 left 1 then up 1 then down 1 right 2 then down 1 then down 1 left 2 then up 1 then right 1 up 0.5
+move down 3 left 2;
+line right 3 -> width 0.1 height 0.2 ;
+move down 1;
+box color "skyblue4" ljust "box"
+.PE
+.ps
+.PS
+line down  "line1" ljust;
+line left  "line2" ljust;
+line up  "line3" ljust;
+line right  "line4" ljust;
+move right; box;
+line from 3rd line.n  to last box.e
+A: box "first" "object"; box "second" "objext";
+move;
+B: ellipse "third";
+move;
+.PE
+.
+.
+.
+.PS
+b=2;
+define test {
+b=1
+scale=$1;
+boxht=b; boxwid=0.3;movewid=0.2;box;move;box;move;box;move;box;move 3;
+}
+test(12);
+reset;
+boxht=b; boxwid=0.3;movewid=0.2;box;move;box;move;box;move;box;move 3;
+.PE
+
+.PS
+reset;
+boxht=1; boxwid=0.3;movewid=0.2;box;move;box;move;box;move;box;
+.PE
+.PS  
+pi = atan2(0,-1);
+print pi;
+for i = 0 to 2 * pi by 0.1 do U
+	"-" at (i/2, 0);
+	"." at (i/2, sin(i)/2);
+	":" at (i/2, cos(i)/2);
+U
+.PF
+dkfjalk
+.sp 2
+fkdfjlj

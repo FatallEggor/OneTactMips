@@ -1,0 +1,9 @@
+.PS
+bitsize = 4 / 32;
+op = 6 * bitsize;
+addr = 26 * bitsize;
+move 1.35;
+[box width op "op"; ;box width addr  "addr";
+"6 bits" at 2th last  box .s + (0, -0.15); 
+"26 bits" at 1th last  box .s + (0, -0.15);] 
+.PE

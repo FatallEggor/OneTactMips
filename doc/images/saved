@@ -1,0 +1,61 @@
+
+move to Mux1;
+move up 2*sc right 3*sc;
+Contr: [box width 1*sc height 2.5*sc rad 0.1*sc "\fBcontroller\fP";
+"func" at last box.nw + (0.2*sc, -2.2*sc);
+"op_c" at last box.nw + (0.2*sc, -1.8*sc);
+"zero" at last box.nw + (0.2*sc, -0.5*sc);
+"pc_next_c" at last box.ne + (0.25*sc, 0);
+"result_c" at last box.ne + (0.25*sc, 1 * -2.5 *sc/ 7);
+"mw_c" at last box.ne + (0.25*sc, 2 * -2.5*sc / 7);
+"alu_c" at last box.ne + (0.25*sc, 3 * -2.5*sc / 7);
+"ArgB_c" at last box.ne + (0.25*sc, 4 * -2.5*sc / 7);
+"dest_reg_c" at last box.ne + (0.25*sc, 5 * -2.5*sc / 7);
+"we_c" at last box.ne + (0.25*sc, 6 * -2.5*sc / 7);
+]
+
+#inputs to controller
+#op_c
+line from Instr.start to (Instr.start, Contr.n) + (0, -1.8*sc);
+circle rad 0.03*sc fill 1 with .center at last line.end;
+line from last circle.c to Contr.nw + (0,-1.8*sc) "[31:26]" "";
+#func
+circle rad 0.03*sc fill 1 with .center at 2nd last line.end + (0, -0.4*sc);
+line from last circle.c to Contr.nw + (0,-2.2*sc) "[5:0]" "";
+#zero
+line down 0.15*sc from ALU.s + (0.1*sc, 0) then right 0.6*sc;
+line to (last line.end, Contr.n) + (0, 0.3*sc);
+line to (Contr.w, last line.end) + (-0.2*sc, 0);
+line to (last line.end, Contr.nw) + (0, -0.6*sc);
+line to  Contr.nw + (0, -0.6*sc);
+
+#outputs from controller
+#we_c
+line from Contr.ne + (-0.22*sc, 6.5 * -2.5*sc / 7) to (Reg_file.e,Contr.ne) + (-0.2*sc, 6.5 * -2.5*sc / 7);
+line to Reg_file.ne + (-0.2*sc, -0.3*sc);
+#dest_reg_c
+line from Contr.ne + (-0.22*sc, 5.5 * -2.5*sc / 7) to (Reg_file.e,Contr.ne) + (0.05*sc, 5.5 * -2.5*sc / 7);
+line to (last line.end, Mux2.n);
+line to Mux2.n;
+line to Mux2.n + (0, -0.075*sc);
+#ArgB_c
+line from Contr.ne + (-0.22*sc, 4.5 * -2.5*sc / 7) to (Mux3.e, Contr.ne) + (0.05*sc, 4.5 * -2.5*sc / 7);
+line to (last line.end, Mux3.c);
+line left 0.12*sc;
+#alu_c
+line from Contr.ne + (-0.22*sc, 3.5 * -2.5*sc / 7) to (ALU.e, Contr.ne) + (0.15*sc, 3.5 * -2.5*sc / 7);
+line to (last line.end, ALU.c);
+line left 0.35*sc;
+#mw_c
+line from Contr.ne + (-0.22*sc, 2.5 * -2.5*sc / 7) to (RAM.e, Contr.ne) + (0.1*sc, 2.5 * -2.5*sc / 7);
+line to (last line.end, RAM.c);
+line left 0.1*sc;
+#result_c
+line from Contr.ne + (-0.22*sc, 1.5 * -2.5*sc / 7) to (RAM.e, Contr.ne) + (0.15*sc, 1.5 * -2.5*sc / 7);
+line to (last line.end, Mux4.c);
+line left 0.6*sc;
+#pc_next_c
+line right 0.3*sc from Contr.ne + (-0.22*sc, 0.5 * -2.5*sc / 7);
+line up 0.3*sc
+line to (Mux1.c, last line.end);
+line to (last line.end, Mux1.n) + (0, -0.1*sc);

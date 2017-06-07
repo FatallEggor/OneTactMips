@@ -1,0 +1,17 @@
+.PS
+bitsize = 4 / 32;
+op = 6 * bitsize;
+rs = 5 * bitsize;
+rt = rs;
+rd = rs;
+imm = 16 * bitsize;
+move 1.35;
+[box width op "op"; box  width rs "rs";box width rt "rt";box width imm  "imm";
+"6 bits" at 4th last  box .s + (0, -0.15); 
+"5 bits" at 3th last  box .s + (0, -0.15); 
+"5 bits" at 2th last  box .s + (0, -0.15); 
+"16 bits" at 1th last  box .s + (0, -0.15);] 
+move to last [].s + (0, -0.25);
+"Рисунок 3 \(em Itype"
+.PE
+
